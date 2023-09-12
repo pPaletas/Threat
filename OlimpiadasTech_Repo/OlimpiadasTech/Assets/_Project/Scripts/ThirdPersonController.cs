@@ -14,7 +14,16 @@ namespace StarterAssets
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
+        [Header("Crouch")]
+        public Vector2 crouchingValues = new Vector2(1.1f, .58f);
+        public Vector3 cameraCrouchingOffset = new Vector3(0f, 1f, 0f);
+        public Vector2 standingValues = new Vector2(1.5f, .78f);
+        public Vector3 cameraStandingOffset = new Vector3(0f, 1.375f, 0f);
+
+        public float checkDistance = 0.2f;
         [Header("Player")]
+        public Transform cameraRoot;
+
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
 
@@ -87,6 +96,7 @@ namespace StarterAssets
         private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
+        private bool _isCrouching = false;
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -124,6 +134,17 @@ namespace StarterAssets
             }
         }
 
+        private bool CanStandUp()
+        {
+            bool cantStandUp = Physics.SphereCast(cameraRoot.position, 0.3f, Vector3.up, out RaycastHit hit, checkDistance);
+
+            return !cantStandUp;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawRay(cameraRoot.position, Vector3.up * checkDistance);
+        }
 
         private void Awake()
         {
@@ -218,7 +239,30 @@ namespace StarterAssets
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = MoveSpeed;
+
             if (_input.crouch)
+            {
+                _controller.height = crouchingValues.x;
+                Vector3 center = new Vector3(0f, crouchingValues.y, 0f);
+                _controller.center = center;
+
+                cameraRoot.localPosition = cameraCrouchingOffset;
+                _animator.SetBool(_animIDCrouching, true);
+                _isCrouching = true;
+            }
+            // SI no hay input, pero el jugador no se puede parar
+            else if (CanStandUp())
+            {
+                _controller.height = standingValues.x;
+                Vector3 center = new Vector3(0f, standingValues.y, 0f);
+                _controller.center = center;
+
+                cameraRoot.localPosition = cameraStandingOffset;
+                _animator.SetBool(_animIDCrouching, false);
+                _isCrouching = false;
+            }
+
+            if (_isCrouching)
             {
                 targetSpeed = CrouchSpeed;
             }
@@ -285,7 +329,6 @@ namespace StarterAssets
             // update animator if using character
             if (_hasAnimator)
             {
-                _animator.SetBool(_animIDCrouching, _input.crouch);
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
@@ -385,14 +428,27 @@ namespace StarterAssets
 
         private void OnFootstep(AnimationEvent animationEvent)
         {
-            float multiplier = animationEvent.animatorClipInfo.clip.name == "Crouched Walking" ? 0.5f : 1f;
+            float multiplier;
+            float noiseGeneration;
 
-            if (animationEvent.animatorClipInfo.weight > 0.2f)
+            if (animationEvent.animatorClipInfo.clip.name == "Crouched Walking")
+            {
+                multiplier =  0.3f;
+                noiseGeneration = 5f;
+            }
+            else
+            {
+                multiplier = 1f;
+                noiseGeneration = 30f;
+            }
+
+            if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
                 if (FootstepAudioClips.Length > 0)
                 {
                     var index = Random.Range(0, FootstepAudioClips.Length);
                     AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_controller.center), FootstepAudioVolume * multiplier);
+                    NoiseSystem.Instance.GenerateNoise(10f, noiseGeneration);
                 }
             }
         }
