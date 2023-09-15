@@ -433,13 +433,13 @@ namespace StarterAssets
 
             if (animationEvent.animatorClipInfo.clip.name == "Crouched Walking")
             {
-                multiplier =  0.3f;
+                multiplier = 0.3f;
                 noiseGeneration = 5f;
             }
             else
             {
                 multiplier = 1f;
-                noiseGeneration = 30f;
+                noiseGeneration = 50f;
             }
 
             if (animationEvent.animatorClipInfo.weight > 0.5f)
@@ -458,6 +458,7 @@ namespace StarterAssets
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
+                NoiseSystem.Instance.GenerateNoise(10f, 100f);
             }
         }
     }

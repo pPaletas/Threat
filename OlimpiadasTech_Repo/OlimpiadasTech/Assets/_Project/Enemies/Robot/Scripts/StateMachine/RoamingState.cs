@@ -1,13 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class RoamingState : RobotState
 {
     public RoamingState(RobotStateMachine stateMachine) : base(stateMachine) { }
 
+    public override void Enter()
+    {
+        base.Enter();
+        stateMachine.detectionSystem.SetEnhancedSight(false);
+        stateMachine.detectionSystem.SetEarsActive(true);
+        stateMachine.movementSystem.SetSpeed(1f);
+        stateMachine.movementSystem.SetStoppingDistance(0f);
+    }
+
     public override void Tick()
     {
         stateMachine.movementSystem.RoamAround();
+        stateMachine.animationSystem.PlayAnimation();
         base.Tick();
     }
 
@@ -15,6 +26,7 @@ public class RoamingState : RobotState
     {
         base.Exit();
         stateMachine.movementSystem.StopAgent();
+        stateMachine.detectionSystem.SetEarsActive(true);
     }
 
     protected override void CheckTransitions()

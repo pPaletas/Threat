@@ -8,7 +8,7 @@ public static class OlimpiadasUtils
     public static bool HasReachedDestination(this NavMeshAgent agent)
     {
         float dist = agent.remainingDistance;
-        return dist != Mathf.Infinity && agent.pathStatus == NavMeshPathStatus.PathComplete && agent.remainingDistance == 0;
+        return dist != Mathf.Infinity && agent.pathStatus == NavMeshPathStatus.PathComplete && agent.remainingDistance == 0 && !agent.pathPending;
     }
 
     public static float Modulus(float a, float b)

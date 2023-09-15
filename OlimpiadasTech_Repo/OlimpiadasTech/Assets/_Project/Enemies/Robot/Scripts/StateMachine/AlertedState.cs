@@ -11,50 +11,53 @@ public class AlertedState : RobotState
     private float _currentWaitTime = 0f;
     private float _currentCheckedTime = 0f;
 
-    private bool _spotChecked = false;
+    private bool _spotInSight = false;
 
     public AlertedState(RobotStateMachine stateMachine) : base(stateMachine) { }
 
     public override void Enter()
     {
         base.Enter();
+        stateMachine.detectionSystem.SetEnhancedSight(true);
         _isPlrBlocked = stateMachine.detectionSystem.IsPlayerBlocked();
         _possiblePlrPosition = SceneData.Instance.Player.transform.position;
+        stateMachine.animationSystem.StopAnimation();
     }
 
     public override void Tick()
     {
         if (_currentWaitTime < _waitTime) _currentWaitTime += Time.deltaTime;
-        else if (!_spotChecked)
+        else if (!_spotInSight)
         {
             if (_isPlrBlocked)
             {
                 MoveToOrigin();
+                stateMachine.animationSystem.PlayAnimation();
             }
             else
             {
                 LookTowardsOrigin();
             }
 
-            base.Tick();
         }
+        base.Tick();
     }
 
     protected override void CheckTransitions()
     {
         base.CheckTransitions();
 
-        if(_spotChecked)
+        if (_spotInSight)
         {
             _currentCheckedTime += Time.deltaTime;
 
-            if(_currentCheckedTime >= _checkingTime)
+            if (_currentCheckedTime >= _checkingTime)
             {
                 stateMachine.SetState(new RoamingState(stateMachine));
             }
         }
 
-        if(stateMachine.detectionSystem.GetSight() == DetectionResult.Direct)
+        if (stateMachine.detectionSystem.GetSight() == DetectionResult.Direct && !stateMachine.detectionSystem.IsPlayerBlocked())
         {
             stateMachine.SetState(new ChasingState(stateMachine));
         }
@@ -69,7 +72,7 @@ public class AlertedState : RobotState
         Quaternion targetRotation = Quaternion.LookRotation(unit);
         stateMachine.movementSystem.transform.rotation = Quaternion.Lerp(stateMachine.movementSystem.transform.rotation, targetRotation, Time.deltaTime * 5f);
 
-        if (Quaternion.Angle(stateMachine.transform.rotation, targetRotation) <= 5f) _spotChecked = true;
+        if (Quaternion.Angle(stateMachine.transform.rotation, targetRotation) <= 5f) _spotInSight = true;
     }
 
     private void MoveToOrigin()

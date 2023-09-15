@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Settings
   m_EditorClassIdentifier: 
   headerSettings:
-    headerText: MANAGERS/OTHERS
-    headerColor: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 1}
+    headerText: UI
+    headerColor: {r: 1, g: 0.24905658, b: 0.7666257, a: 1}
     textAlignmentOptions: 0
     fontStyleOptions: 0
     fontSize: 12

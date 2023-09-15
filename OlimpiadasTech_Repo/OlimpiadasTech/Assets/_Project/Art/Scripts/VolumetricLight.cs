@@ -12,6 +12,11 @@ public class VolumetricLight : MonoBehaviour
     private Light _spotLight;
     private MeshFilter _meshFilter;
     private Mesh _mesh;
+    private MeshRenderer _meshRenderer;
+
+    private bool _active = true;
+
+    public Light SpotLight { get => _spotLight; }
 
     private Vector3 GetRotatedVector(Vector3 vector, float angle, Vector3 axis)
     {
@@ -112,26 +117,25 @@ public class VolumetricLight : MonoBehaviour
         }
     }
 
-
     private void Awake()
     {
         if (!gameObject.TryGetComponent<MeshFilter>(out _meshFilter)) gameObject.AddComponent<MeshFilter>();
 
-        MeshRenderer meshRenderer;
-        if (!gameObject.TryGetComponent<MeshRenderer>(out meshRenderer)) gameObject.AddComponent<MeshRenderer>();
+        if (!gameObject.TryGetComponent<MeshRenderer>(out _meshRenderer)) gameObject.AddComponent<MeshRenderer>();
 
         _spotLight = GetComponent<Light>();
 
         _mesh = new Mesh();
         _meshFilter.mesh = _mesh;
 
-        meshRenderer.material = Resources.Load<Material>("VolumetricLight");
-        meshRenderer.material.color = _spotLight.color;
-        meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        _meshRenderer.material = Resources.Load<Material>("VolumetricLight");
+        _meshRenderer.material.color = _spotLight.color;
+        _meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
     }
 
     private void LateUpdate()
     {
-        DisplayVolumetricLight();
+        if (_active)
+            DisplayVolumetricLight();
     }
 }

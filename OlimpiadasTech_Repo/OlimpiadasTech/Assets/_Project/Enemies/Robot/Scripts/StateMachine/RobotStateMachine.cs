@@ -24,6 +24,7 @@ public class RobotStateMachine : MonoBehaviour
     [HideInInspector] public MovementSystem movementSystem;
     [HideInInspector] public ShootingSystem shootingSystem;
     [HideInInspector] public DetectionSystem detectionSystem;
+    [HideInInspector] public AnimationSystem animationSystem;
     #endregion
 
     private RobotState currentState;
@@ -41,7 +42,11 @@ public class RobotStateMachine : MonoBehaviour
         movementSystem = GetComponent<MovementSystem>();
         shootingSystem = GetComponent<ShootingSystem>();
         detectionSystem = GetComponent<DetectionSystem>();
+        animationSystem = GetComponent<AnimationSystem>();
+    }
 
+    private void Start()
+    {
         currentState = new RoamingState(this);
         currentState?.Enter();
     }
@@ -49,5 +54,6 @@ public class RobotStateMachine : MonoBehaviour
     private void Update()
     {
         currentState?.Tick();
+        // Debug.Log(currentState.GetType());
     }
 }

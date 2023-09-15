@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+enum RoamingEnumState { Walking, Idle, Rotating }
+
 public class MovementSystem : MonoBehaviour
 {
     [Header("Movement")]
@@ -19,15 +21,22 @@ public class MovementSystem : MonoBehaviour
     private NavMeshAgent _agent;
 
     private int _currentDirection = 1;
-    private int _currentPoint = -1;
-    private bool _isReachingDestination = true;
-    private bool _isInIdleTime = false;
-
+    private int _currentIndex = 0;
     private const float TARGET_ROTATION_THRESHOLD = 5f;
+
+    private RoamingEnumState _lastState = RoamingEnumState.Rotating;
+    private RoamingEnumState _currentState = RoamingEnumState.Idle;
+
+    public NavMeshAgent Agent { get => _agent; }
 
     public void SetStoppingDistance(float stoppingDistance)
     {
         _agent.stoppingDistance = stoppingDistance;
+    }
+
+    public void SetSpeed(float multiplier)
+    {
+        _agent.speed = _speed * multiplier;
     }
 
     public void MoveTowards(Vector3 position)
@@ -40,25 +49,40 @@ public class MovementSystem : MonoBehaviour
 
     public void RoamAround()
     {
-        _agent.autoBraking = true;
+        if (_currentState == RoamingEnumState.Idle)
+        {
+            if (_currentState != _lastState) StartCoroutine(StartIdleTime());
 
-        if (!_agent.HasReachedDestination())
-        {
-            _isReachingDestination = true;
-            MoveTowards(_roamingPoints[_currentPoint].position);
+            _lastState = _currentState;
         }
-        else
+        else if (_currentState == RoamingEnumState.Walking)
         {
-            // Este bloque se ejecutará solo una vez despues de haber llegado al target
-            if (_isReachingDestination)
+            MoveTowards(_roamingPoints[_currentIndex].position);
+
+            _lastState = _currentState;
+
+            if (_agent.HasReachedDestination())
             {
-                _isReachingDestination = false;
-                _currentPoint = GetNextIndex();
-                StartCoroutine(StartIdleTime());
+                StopAgent();
+                _currentState = RoamingEnumState.Idle;
+            }
+        }
+        else if (_currentState == RoamingEnumState.Rotating)
+        {
+            if (_currentState != _lastState)
+            {
+                _currentIndex = GetNextIndex();
             }
 
-            if (!_isInIdleTime) RotateSmoothly();
+            _lastState = _currentState;
+
+            RotateSmoothly();
         }
+    }
+
+    public void ResetRoaming()
+    {
+
     }
 
     public void StopAgent()
@@ -68,9 +92,8 @@ public class MovementSystem : MonoBehaviour
 
     private IEnumerator StartIdleTime()
     {
-        _isInIdleTime = true;
         yield return new WaitForSeconds(_idleTime);
-        _isInIdleTime = false;
+        _currentState = RoamingEnumState.Rotating;
     }
 
     private IEnumerator StartMovingAfterRotation()
@@ -79,9 +102,8 @@ public class MovementSystem : MonoBehaviour
 
         // Revisamos que el agente no se haya parado aproposito
         if (!_agent.isStopped)
-            MoveTowards(_roamingPoints[_currentPoint].position);
+            MoveTowards(_roamingPoints[_currentIndex].position);
     }
-
 
     private int GetNextIndex()
     {
@@ -92,22 +114,22 @@ public class MovementSystem : MonoBehaviour
 
         if (!_loop)
         {
-            nextPoint = _currentPoint + _currentDirection;
+            nextPoint = _currentIndex + _currentDirection;
             if (nextPoint < 0 || nextPoint >= _roamingPoints.Count)
             {
                 _currentDirection *= -1;
-                nextPoint = _currentPoint + _currentDirection;
+                nextPoint = _currentIndex + _currentDirection;
             }
         }
         else
-            nextPoint = OlimpiadasUtils.ModulusInt((_currentPoint + _currentDirection), _roamingPoints.Count);
+            nextPoint = OlimpiadasUtils.ModulusInt((_currentIndex + _currentDirection), _roamingPoints.Count);
 
         return Mathf.Clamp(nextPoint, 0, _roamingPoints.Count);
     }
 
     private void RotateSmoothly()
     {
-        Vector3 directionToNextTarget = (_roamingPoints[_currentPoint].position - _agent.transform.position);
+        Vector3 directionToNextTarget = (_roamingPoints[_currentIndex].position - _agent.transform.position);
         directionToNextTarget.y = 0;
         directionToNextTarget.Normalize();
 
@@ -119,6 +141,7 @@ public class MovementSystem : MonoBehaviour
         if (Quaternion.Angle(transform.rotation, targetRot) <= TARGET_ROTATION_THRESHOLD)
         {
             StartCoroutine(StartMovingAfterRotation());
+            _currentState = RoamingEnumState.Walking;
         }
     }
 
