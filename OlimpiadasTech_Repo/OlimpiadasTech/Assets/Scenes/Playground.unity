@@ -1411,7 +1411,7 @@ MonoBehaviour:
   ShootDelay: 0.1
   Mask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 768
   BulletSpeed: 100
   _bulletPool: {fileID: 1685076531}
   _impactPool: {fileID: 1685076533}
@@ -1481,7 +1481,7 @@ MonoBehaviour:
   ShootDelay: 0.1
   Mask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 768
   BulletSpeed: 100
   _bulletPool: {fileID: 1685076531}
   _impactPool: {fileID: 1685076533}
@@ -2376,7 +2376,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 297.8132, y: -54.7216}
+  m_AnchoredPosition: {x: 297.81323, y: -54.721558}
   m_SizeDelta: {x: 469.6098, y: 94.1905}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &941188326
@@ -3576,7 +3576,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.7
   m_Speed: 3.5
-  m_Acceleration: 64
+  m_Acceleration: 16
   avoidancePriority: 50
   m_AngularSpeed: 1200
   m_StoppingDistance: 0
@@ -4810,7 +4810,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -175, y: -54.721985}
+  m_AnchoredPosition: {x: -175, y: -54.721924}
   m_SizeDelta: {x: 290.5138, y: 94.19}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1987674164
@@ -5138,6 +5138,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Box_350x250x200_Prefab
       objectReference: {fileID: 0}
+    - target: {fileID: 2742374090662089873, guid: 09aade0ecefd01e4b8f7661acf64f5c2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 2851502387910328280, guid: 09aade0ecefd01e4b8f7661acf64f5c2,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -5212,6 +5217,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Box_350x250x300_Prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 5043663941078610840, guid: 09aade0ecefd01e4b8f7661acf64f5c2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 5488872079086472783, guid: 09aade0ecefd01e4b8f7661acf64f5c2,
         type: 3}
