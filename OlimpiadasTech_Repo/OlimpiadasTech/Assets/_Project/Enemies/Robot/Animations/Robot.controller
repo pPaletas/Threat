@@ -58,13 +58,13 @@ AnimatorController:
     m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: BodySpeed
     m_Type: 1
     m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Body
@@ -98,7 +98,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Idle
-  m_Speed: 1.5
+  m_Speed: 0.8
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -125,7 +125,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Wheels
-  m_Speed: 0.8
+  m_Speed: 0.4
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
