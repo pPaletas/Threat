@@ -14,6 +14,7 @@ public class ConfusedState : RobotState
     {
         base.Enter();
         stateMachine.detectionSystem.SetEarsActive(true);
+        stateMachine.questionMark.SetActive(true);
     }
 
     public override void Tick()
@@ -26,6 +27,7 @@ public class ConfusedState : RobotState
         }
         else
         {
+            stateMachine.questionMark.SetActive(false);
             stateMachine.movementSystem.StopAgent();
         }
 
@@ -36,6 +38,8 @@ public class ConfusedState : RobotState
     {
         base.Exit();
         stateMachine.detectionSystem.SetEarsActive(false);
+
+        stateMachine.questionMark.SetActive(false);
     }
 
     protected override void CheckTransitions()

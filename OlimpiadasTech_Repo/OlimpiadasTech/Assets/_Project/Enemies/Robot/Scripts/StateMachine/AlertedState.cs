@@ -22,6 +22,8 @@ public class AlertedState : RobotState
         _isPlrBlocked = stateMachine.detectionSystem.IsPlayerBlocked();
         _possiblePlrPosition = SceneData.Instance.Player.transform.position;
         stateMachine.animationSystem.StopAnimation();
+        stateMachine.isVulnerable = true;
+        stateMachine.questionMark.SetActive(true);
     }
 
     public override void Tick()
@@ -29,6 +31,7 @@ public class AlertedState : RobotState
         if (_currentWaitTime < _waitTime) _currentWaitTime += Time.deltaTime;
         else if (!_spotInSight)
         {
+            stateMachine.questionMark.SetActive(false);
             if (_isPlrBlocked)
             {
                 MoveToOrigin();
@@ -41,6 +44,15 @@ public class AlertedState : RobotState
 
         }
         base.Tick();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        stateMachine.isVulnerable = false;
+
+        // En caso de que por alguna razón no se haya desactivado
+        stateMachine.questionMark.SetActive(false);
     }
 
     protected override void CheckTransitions()

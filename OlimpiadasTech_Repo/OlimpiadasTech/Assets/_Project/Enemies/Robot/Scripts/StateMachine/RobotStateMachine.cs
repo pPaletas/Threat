@@ -27,6 +27,9 @@ public class RobotStateMachine : MonoBehaviour
     [HideInInspector] public AnimationSystem animationSystem;
     #endregion
 
+    [HideInInspector] public GameObject questionMark;
+    [HideInInspector] public GameObject exclamationMark;
+    [HideInInspector] public bool isVulnerable = false;
     private RobotState currentState;
 
     public void SetState(RobotState state)
@@ -36,6 +39,16 @@ public class RobotStateMachine : MonoBehaviour
         currentState.Enter();
     }
 
+    public void SetupAnimation()
+    {
+        SetState(new CaughtState(this));
+    }
+
+    public void Kill()
+    {
+        SetState(new KilledState(this));
+    }
+
     private void Awake()
     {
         // Reference systems
@@ -43,6 +56,9 @@ public class RobotStateMachine : MonoBehaviour
         shootingSystem = GetComponent<ShootingSystem>();
         detectionSystem = GetComponent<DetectionSystem>();
         animationSystem = GetComponent<AnimationSystem>();
+
+        questionMark = transform.Find("Symbols/QuestionMark").gameObject;
+        exclamationMark = transform.Find("Symbols/ExclamationMark").gameObject;
     }
 
     private void Start()

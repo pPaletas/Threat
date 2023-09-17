@@ -97,7 +97,6 @@ public class DetectionSystem : MonoBehaviour
 
         if (angle <= _detectionAngle)
         {
-
             return DetectionResult.Direct;
         }
         else if (angle <= _perifericAngle)
@@ -181,10 +180,11 @@ public class DetectionSystem : MonoBehaviour
         }
     }
 
-    private void Awake()
+    private void Start()
     {
         _originalAngle = _detectionAngle;
         _originalRange = _detectionRange;
+
         _spotLightOriginalAngle = _light.SpotLight.spotAngle;
         _spotLightOriginalRange = _light.SpotLight.range;
     }

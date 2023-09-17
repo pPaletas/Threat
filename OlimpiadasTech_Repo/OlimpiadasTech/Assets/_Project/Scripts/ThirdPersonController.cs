@@ -14,6 +14,8 @@ namespace StarterAssets
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
+        public bool canMove = true;
+
         [Header("Crouch")]
         public Vector2 crouchingValues = new Vector2(1.1f, .58f);
         public Vector3 cameraCrouchingOffset = new Vector3(0f, 1f, 0f);
@@ -239,6 +241,7 @@ namespace StarterAssets
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = MoveSpeed;
+            _input.move = canMove ? _input.move : Vector2.zero;
 
             if (_input.crouch)
             {
@@ -355,7 +358,7 @@ namespace StarterAssets
                 }
 
                 // Jump
-                if (_input.jump && _jumpTimeoutDelta <= 0.0f && !_input.crouch)
+                if (_input.jump && _jumpTimeoutDelta <= 0.0f && !_input.crouch && canMove)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -367,7 +370,7 @@ namespace StarterAssets
                     }
                 }
                 // Evitamos que salte despues de dejar presinado el crouch, y saltar
-                else if (_input.crouch) _input.jump = false;
+                else if (_input.crouch || !canMove) _input.jump = false;
 
                 // jump timeout
                 if (_jumpTimeoutDelta >= 0.0f)
@@ -448,7 +451,7 @@ namespace StarterAssets
                 {
                     var index = Random.Range(0, FootstepAudioClips.Length);
                     AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_controller.center), FootstepAudioVolume * multiplier);
-                    NoiseSystem.Instance.GenerateNoise(10f, noiseGeneration);
+                    NoiseSystem.Instance.GenerateNoise(5f, noiseGeneration);
                 }
             }
         }
@@ -458,7 +461,7 @@ namespace StarterAssets
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
-                NoiseSystem.Instance.GenerateNoise(10f, 100f);
+                NoiseSystem.Instance.GenerateNoise(5f, 100f);
             }
         }
     }

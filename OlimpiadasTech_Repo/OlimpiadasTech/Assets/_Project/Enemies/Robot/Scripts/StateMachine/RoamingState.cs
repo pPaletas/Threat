@@ -13,6 +13,7 @@ public class RoamingState : RobotState
         stateMachine.detectionSystem.SetEarsActive(true);
         stateMachine.movementSystem.SetSpeed(1f);
         stateMachine.movementSystem.SetStoppingDistance(0f);
+        stateMachine.isVulnerable = true;
     }
 
     public override void Tick()
@@ -27,6 +28,7 @@ public class RoamingState : RobotState
         base.Exit();
         stateMachine.movementSystem.StopAgent();
         stateMachine.detectionSystem.SetEarsActive(true);
+        stateMachine.isVulnerable = false;
     }
 
     protected override void CheckTransitions()

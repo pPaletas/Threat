@@ -15,6 +15,7 @@ public class ChasingState : RobotState
         stateMachine.movementSystem.StopAgent();
         stateMachine.movementSystem.SetStoppingDistance(1f);
         stateMachine.movementSystem.Agent.updateRotation = false;
+        stateMachine.exclamationMark.SetActive(true);
     }
 
     public override void Tick()
@@ -31,6 +32,7 @@ public class ChasingState : RobotState
             {
                 stateMachine.movementSystem.SetSpeed(2f);
                 stateMachine.animationSystem.EnableHeadIk(true);
+                stateMachine.exclamationMark.SetActive(false);
             }
 
             float dist = Vector3.Distance(stateMachine.transform.position, SceneData.Instance.Player.transform.position);
@@ -72,6 +74,8 @@ public class ChasingState : RobotState
         stateMachine.movementSystem.Agent.updateRotation = true;
         stateMachine.movementSystem.SetSpeed(1f);
         stateMachine.animationSystem.EnableHeadIk(false);
+
+        stateMachine.exclamationMark.SetActive(false);
     }
 
     protected override void CheckTransitions()
