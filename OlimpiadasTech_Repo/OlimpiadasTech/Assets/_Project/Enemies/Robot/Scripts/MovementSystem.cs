@@ -80,11 +80,6 @@ public class MovementSystem : MonoBehaviour
         }
     }
 
-    public void ResetRoaming()
-    {
-
-    }
-
     public void StopAgent()
     {
         _agent.isStopped = true;

@@ -8,6 +8,7 @@ public class VolumetricLight : MonoBehaviour
     [Range(4, 64), SerializeField] private int _resolution = 16;
     [Range(0.01f, 10f), SerializeField] private float _displacement = 1f;
     [SerializeField] private LayerMask _groundMask;
+    [SerializeField] private bool _straight = true;
 
     private Light _spotLight;
     private MeshFilter _meshFilter;
@@ -73,7 +74,6 @@ public class VolumetricLight : MonoBehaviour
             vertices[verticesIndex] = GetRotatedVector(Vector3.right, currentAngle, Vector3.forward) * radius;
 
             Vector3 unit = vertices[verticesIndex].normalized;
-            // El primero anillo no está girado hacia la dirección de la luz, siempre se queda apuntando hacia al frente, por lo que es necesario, obtener un unit que corresponda al up del transform
 
             // if (verticesIndex == 0) Debug.Log(unit);
 
@@ -83,10 +83,15 @@ public class VolumetricLight : MonoBehaviour
             // Debug.DrawRay(transform.position, transform.forward, Color.blue);
             // Debug.DrawRay(transform.position, unit, Color.green);
             // Debug.DrawRay(transform.position + transform.forward * 0.5f, Quaternion.AngleAxis(_spotLight.spotAngle * 0.5f, Vector3.Cross(Vector3.forward, unit)) * Vector3.forward);
-            Vector3 noYNextVertex = vertexDirection;
-            noYNextVertex = Quaternion.AngleAxis(transform.eulerAngles.x, -Vector3.right) * vertexDirection;
 
-            vertices[verticesIndex] = (noYNextVertex * _displacement);
+            if (_straight)
+            {
+                Vector3 noYNextVertex = vertexDirection;
+                noYNextVertex = Quaternion.AngleAxis(transform.eulerAngles.x, -Vector3.right) * vertexDirection;
+
+                vertices[verticesIndex] = (noYNextVertex * _displacement);
+            }
+            vertices[verticesIndex] = (vertexDirection * _displacement);
 
             float dist = _spotLight.range;
 
@@ -119,9 +124,9 @@ public class VolumetricLight : MonoBehaviour
 
     private void Awake()
     {
-        if (!gameObject.TryGetComponent<MeshFilter>(out _meshFilter)) gameObject.AddComponent<MeshFilter>();
+        if (!gameObject.TryGetComponent<MeshFilter>(out _meshFilter)) _meshFilter = gameObject.AddComponent<MeshFilter>();
 
-        if (!gameObject.TryGetComponent<MeshRenderer>(out _meshRenderer)) gameObject.AddComponent<MeshRenderer>();
+        if (!gameObject.TryGetComponent<MeshRenderer>(out _meshRenderer)) _meshRenderer = gameObject.AddComponent<MeshRenderer>();
 
         _spotLight = GetComponent<Light>();
 

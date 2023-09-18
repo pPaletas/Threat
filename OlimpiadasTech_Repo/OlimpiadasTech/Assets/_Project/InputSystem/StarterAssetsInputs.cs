@@ -23,6 +23,7 @@ namespace StarterAssets
         [Header("Mouse Cursor Settings")]
         public bool cursorLocked = true;
         public bool cursorInputForLook = true;
+        public float zoom = 0f;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         public void OnMove(InputValue value)
@@ -57,6 +58,11 @@ namespace StarterAssets
         {
             onKillButtonPressed?.Invoke();
         }
+
+        public void OnZoom(InputValue value)
+        {
+            ZoomInput(value.Get<Vector2>());
+        }
 #endif
 
 
@@ -83,6 +89,11 @@ namespace StarterAssets
         public void CrouchInput(bool newCrouchState)
         {
             crouch = newCrouchState;
+        }
+
+        public void ZoomInput(Vector2 newZoomState)
+        {
+            zoom = newZoomState.y;
         }
 
         private void OnApplicationFocus(bool hasFocus)

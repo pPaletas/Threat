@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ChasingState : RobotState
 {
@@ -52,8 +53,9 @@ public class ChasingState : RobotState
                 stateMachine.animationSystem.EnableHeadIk(false);
             }
 
+            // bool isWalkable = NavMesh.SamplePosition(SceneData.Instance.Player.transform.position, out NavMeshHit hit, 0.5f, 1);
             // Si está lo suficientemente lejos lo sigue, sino, entonces para y dispara
-            if (dist >= stateMachine.movementSystem.Agent.stoppingDistance * 5f || stateMachine.detectionSystem.IsPlayerBlocked())
+            if (/*isWalkable &&*/ (dist >= stateMachine.movementSystem.Agent.stoppingDistance * 5f || stateMachine.detectionSystem.IsPlayerBlocked()))
             {
                 stateMachine.movementSystem.MoveTowards(_lastSeenPos);
             }
@@ -82,6 +84,11 @@ public class ChasingState : RobotState
     {
         base.CheckTransitions();
 
+        // Si el jugador pasa por una parte sin navmesh y ya no ve al jugadir
+        // if (!NavMesh.SamplePosition(SceneData.Instance.Player.transform.position, out NavMeshHit hit, 0.5f, 0) && stateMachine.detectionSystem.IsPlayerBlocked())
+        // {
+        //     stateMachine.SetState(new RoamingState(stateMachine));
+        // }
         // Si llegó al destino, pero no ve al jugador
         if (stateMachine.movementSystem.Agent.HasReachedDestination() && stateMachine.detectionSystem.IsPlayerBlocked())
         {
