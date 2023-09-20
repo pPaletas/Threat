@@ -23,7 +23,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8432381175039162288}
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000043213362}
+  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: -1.7, y: 0, z: 10.36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 8432381176232574311}
   - component: {fileID: 8432381176232574312}
   - component: {fileID: 8432381176232574310}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Drone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,7 +163,7 @@ MonoBehaviour:
   _chaseSpeed: 7
   _aggressiveness: 10
   _aggressivenessAngle: 20
-  _preExplosionTime: 3
+  _preExplosionTime: 1
   _groundLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -171,6 +171,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   _light: {fileID: 8432381177059398094}
+  _explosionForce: 500
 --- !u!54 &8432381176232574310
 Rigidbody:
   m_ObjectHideFlags: 0

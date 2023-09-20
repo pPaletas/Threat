@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using StarterAssets;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class HackingSystem : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class HackingSystem : MonoBehaviour
     [SerializeField] private LayerMask _wallsMask;
     [SerializeField] private Transform _grabButton;
     [SerializeField] private Transform _grabTransform;
+    [SerializeField] private Rig _rightHandIK;
 
     [HideInInspector] public bool isGrabbingSomething = false;
 
@@ -154,6 +156,7 @@ public class HackingSystem : MonoBehaviour
             isGrabbingSomething = true;
 
             _anim.SetBool(_carryingHash, true);
+            _rightHandIK.weight = 1f;
         }
         else if (isCarryingSomething)
         {
@@ -162,6 +165,7 @@ public class HackingSystem : MonoBehaviour
             _grabTransform.GetChild(0).GetComponent<Rigidbody>().isKinematic = false;
             _grabTransform.GetChild(0).SetParent(null);
             _anim.SetBool(_carryingHash, false);
+            _rightHandIK.weight = 0f;
 
             isGrabbingSomething = false;
         }

@@ -29,6 +29,8 @@ public class Drone : MonoBehaviour
     [SerializeField] private LayerMask _plrLayer;
     [SerializeField] private Light _light;
 
+    [SerializeField] private float _explosionForce = 50f;
+
     private List<Transform> _roamingPoints = new List<Transform>();
 
     private DroneState _currentState = DroneState.Moving;
@@ -148,7 +150,7 @@ public class Drone : MonoBehaviour
             bool isPlrCloseEnough = Vector3.Distance(SceneData.Instance.Player.transform.position, transform.position) <= _explosionRadius;
             bool isPlrBlocked = IsPlayerBlocked();
 
-            // if (isCloseEnough && _target.parent != null && _target.parent.TryGetComponent<HealthSystem>(out HealthSystem health))
+            BlowUpSurroundings();
 
             if (isPlrCloseEnough && !isPlrBlocked)
                 SceneData.Instance.Player.GetComponent<HealthSystem>().TakeDamage(33f);
@@ -158,6 +160,29 @@ public class Drone : MonoBehaviour
 
             GameObject.Destroy(gameObject, 0.1f);
             gameObject.SetActive(false);
+        }
+    }
+
+    private void BlowUpSurroundings()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, _explosionRadius);
+
+        if (colliders.Length > 0f)
+        {
+            foreach (Collider hit in colliders)
+            {
+                if (hit.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                {
+                    if (!Physics.Linecast(transform.position, hit.transform.position, _groundLayer))
+                    {
+                        Vector3 unit = (hit.transform.position - transform.position);
+                        unit.y = 0.5f;
+                        unit.Normalize();
+
+                        rb.AddForce(unit * _explosionForce, ForceMode.Impulse);
+                    }
+                }
+            }
         }
     }
 
@@ -214,7 +239,7 @@ public class Drone : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         if (_currentState == DroneState.ChasingTarget)
         {

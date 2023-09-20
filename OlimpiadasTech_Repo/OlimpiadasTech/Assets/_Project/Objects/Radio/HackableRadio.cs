@@ -24,8 +24,8 @@ public class HackableRadio : HackableObject
                     droneScript.Alert(gameObject);
                 }
             }
-            base.OnLoaded_E();
         }
+        base.OnLoaded_E();
     }
 
     private void OnDrawGizmos()

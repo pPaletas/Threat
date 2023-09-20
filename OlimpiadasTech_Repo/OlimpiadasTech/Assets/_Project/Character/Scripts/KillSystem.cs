@@ -17,6 +17,7 @@ public class KillSystem : MonoBehaviour
     private GameObject _closestRobot;
     private Animator _anim;
     private ThirdPersonController _movement;
+    private HackingSystem _hacking;
 
     private bool _isKilling = false;
     private int _killHash = Animator.StringToHash("Kill");
@@ -99,6 +100,7 @@ public class KillSystem : MonoBehaviour
 
         _anim = GetComponent<Animator>();
         _movement = GetComponent<ThirdPersonController>();
+        _hacking = GetComponent<HackingSystem>();
     }
 
     private void OnDisable()
@@ -120,7 +122,7 @@ public class KillSystem : MonoBehaviour
 
     private void KillButton()
     {
-        if (_closestRobot != null)
+        if (_closestRobot != null && !_hacking.isGrabbingSomething)
         {
             _isKilling = true;
             _closestRobot.GetComponent<RobotStateMachine>().SetupAnimation();
