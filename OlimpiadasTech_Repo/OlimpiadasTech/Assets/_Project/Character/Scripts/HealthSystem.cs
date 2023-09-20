@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using StarterAssets;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HealthSystem : MonoBehaviour
 {
@@ -16,9 +17,12 @@ public class HealthSystem : MonoBehaviour
     private float _currentHealth;
     private bool _isDead;
 
-    private Animator _anim;
     private ThirdPersonController _movement;
+
+    // Animation
+    private Animator _anim;
     private int _hurtedHash = Animator.StringToHash("Hurted");
+    private int _defeathHash = Animator.StringToHash("Defeat");
 
     public float CurrentHealth { get => _currentHealth; }
 
@@ -45,9 +49,10 @@ public class HealthSystem : MonoBehaviour
         _currentHealth = Mathf.Clamp(_currentHealth - (maxHealth / 3), 0f, maxHealth);
     }
 
-    public void OnHurtAnimationFinished()
+    public void Defeat()
     {
-        _movement.canMove = true;
+        _movement.canMove = false;
+        _anim.SetTrigger(_defeathHash);
     }
 
     private void Awake()
@@ -62,11 +67,23 @@ public class HealthSystem : MonoBehaviour
         if (_currentHealth < maxHealth)
         {
             float currentAlpha = 1 - (_currentHealth / maxHealth);
-            
+
             // Se le suma 0.5 para que quede entre
             float sine = (Mathf.Sin(Time.time * _animFreq) + 0.5f) * 0.5f * _animIntensity;
 
             _bloodScreen.alpha = currentAlpha - sine;
         }
     }
+
+    #region Callbacks
+    public void OnHurtAnimationFinished()
+    {
+        _movement.canMove = true;
+    }
+
+    public void OnDefeatAnimationFinished()
+    {
+        SceneManager.LoadScene(0);
+    }
+    #endregion
 }

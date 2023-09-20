@@ -46,6 +46,12 @@ public class Drone : MonoBehaviour
     private float _debugRadius;
     private float _debugDistance;
 
+    public void Alert(GameObject emitterObj)
+    {
+        _target = emitterObj.transform;
+        _currentState = DroneState.ChasingTarget;
+    }
+
     private bool ReachedDestination(Vector3 currentPos, Vector3 targetPos)
     {
         return Vector3.Distance(currentPos, targetPos) <= 0.01f;
@@ -57,6 +63,18 @@ public class Drone : MonoBehaviour
         relativeValue = Mathf.Clamp(relativeValue, 0f, 1f);
 
         return Mathf.Abs(curveValue - relativeValue);
+    }
+
+    private bool IsPlayerBlocked()
+    {
+        foreach (Transform plrPoint in SceneData.Instance.PlayerDetectionPointsContainer)
+        {
+            bool blocked = Physics.Linecast(transform.position, plrPoint.position, _groundLayer);
+            // Si por lo menos uno no está bloqueado, entonces el jugador fue detectado
+            if (!blocked) return false;
+        }
+
+        return true;
     }
 
     private void RoamAround()
@@ -127,8 +145,13 @@ public class Drone : MonoBehaviour
         {
             bool isCloseEnough = Vector3.Distance(_target.position, transform.position) <= _explosionRadius;
 
-            if (isCloseEnough && _target.parent.TryGetComponent<HealthSystem>(out HealthSystem health))
-                health.TakeDamage(33f);
+            bool isPlrCloseEnough = Vector3.Distance(SceneData.Instance.Player.transform.position, transform.position) <= _explosionRadius;
+            bool isPlrBlocked = IsPlayerBlocked();
+
+            // if (isCloseEnough && _target.parent != null && _target.parent.TryGetComponent<HealthSystem>(out HealthSystem health))
+
+            if (isPlrCloseEnough && !isPlrBlocked)
+                SceneData.Instance.Player.GetComponent<HealthSystem>().TakeDamage(33f);
 
             _explosionVFX.transform.SetParent(null);
             _explosionVFX.SetActive(true);

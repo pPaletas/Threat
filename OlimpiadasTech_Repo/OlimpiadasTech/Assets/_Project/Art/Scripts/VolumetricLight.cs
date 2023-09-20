@@ -19,6 +19,12 @@ public class VolumetricLight : MonoBehaviour
 
     public Light SpotLight { get => _spotLight; }
 
+    public void SetColor(Color color)
+    {
+        _spotLight.color = color;
+        _meshRenderer.material.color = color;
+    }
+
     private Vector3 GetRotatedVector(Vector3 vector, float angle, Vector3 axis)
     {
         return Quaternion.AngleAxis(angle, axis) * vector;

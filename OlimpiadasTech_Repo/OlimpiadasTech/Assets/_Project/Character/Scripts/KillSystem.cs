@@ -101,6 +101,11 @@ public class KillSystem : MonoBehaviour
         _movement = GetComponent<ThirdPersonController>();
     }
 
+    private void OnDisable()
+    {
+        _input.onKillButtonPressed -= KillButton;
+    }
+
     private void LateUpdate()
     {
         SetClosestRobot();

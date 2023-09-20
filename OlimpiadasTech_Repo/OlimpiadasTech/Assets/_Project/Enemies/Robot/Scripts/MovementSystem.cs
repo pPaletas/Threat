@@ -12,7 +12,7 @@ public class MovementSystem : MonoBehaviour
 
     [Header("Roaming")]
     [SerializeField] private float _rotationSpeed = 10f;
-    [SerializeField] private float _idleTime = 1f;
+    [SerializeField] private Vector2 _stationaryTime = new Vector2(0.5f, 2f);
     [SerializeField] private bool _loop = false;
     [SerializeField] private bool _randomRoaming = false;
     [SerializeField] private Transform _path;
@@ -28,6 +28,7 @@ public class MovementSystem : MonoBehaviour
     private RoamingEnumState _currentState = RoamingEnumState.Idle;
 
     public NavMeshAgent Agent { get => _agent; }
+    private float IdleTime { get => Random.Range(_stationaryTime.x, _stationaryTime.y); }
 
     public void SetStoppingDistance(float stoppingDistance)
     {
@@ -87,13 +88,13 @@ public class MovementSystem : MonoBehaviour
 
     private IEnumerator StartIdleTime()
     {
-        yield return new WaitForSeconds(_idleTime);
+        yield return new WaitForSeconds(IdleTime);
         _currentState = RoamingEnumState.Rotating;
     }
 
     private IEnumerator StartMovingAfterRotation()
     {
-        yield return new WaitForSeconds(_idleTime);
+        yield return new WaitForSeconds(IdleTime);
 
         // Revisamos que el agente no se haya parado aproposito
         if (!_agent.isStopped)

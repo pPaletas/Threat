@@ -16,6 +16,7 @@ namespace StarterAssets
         public bool jump;
         public bool sprint;
         public bool crouch;
+        public bool hack;
 
         [Header("Movement Settings")]
         public bool analogMovement;
@@ -54,6 +55,11 @@ namespace StarterAssets
             CrouchInput(value.isPressed);
         }
 
+        public void OnHack(InputValue value)
+        {
+            HackInput(value.isPressed);
+        }
+
         public void OnKill(InputValue value)
         {
             onKillButtonPressed?.Invoke();
@@ -89,6 +95,11 @@ namespace StarterAssets
         public void CrouchInput(bool newCrouchState)
         {
             crouch = newCrouchState;
+        }
+
+        public void HackInput(bool newHackState)
+        {
+            hack = newHackState;
         }
 
         public void ZoomInput(Vector2 newZoomState)
