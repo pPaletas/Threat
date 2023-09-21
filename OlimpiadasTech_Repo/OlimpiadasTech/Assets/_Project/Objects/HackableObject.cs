@@ -14,6 +14,7 @@ public class HackableObject : MonoBehaviour
 
     [HideInInspector] public bool isActive = true;
     [HideInInspector] public bool isBeingGrabbed = false;
+    [HideInInspector] public bool onlyShow = false;
 
     private Transform _iconsContainer;
     private GameObject _imgOnCanvas;
@@ -87,6 +88,7 @@ public class HackableObject : MonoBehaviour
     protected virtual void OnLoaded_E()
     {
         isActive = false;
+        _imgOnCanvas.transform.localScale = Vector3.one;
     }
 
     protected virtual void Awake()

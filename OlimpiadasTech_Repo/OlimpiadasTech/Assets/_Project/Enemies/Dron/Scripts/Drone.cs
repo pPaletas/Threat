@@ -23,6 +23,7 @@ public class Drone : MonoBehaviour
     [SerializeField] private float _aggressiveness = 10f;
     [SerializeField] private float _aggressivenessAngle = 25f;
     [SerializeField] private float _preExplosionTime = 3f;
+    [SerializeField] private float _explosionDamage = 50f;
 
     [Header("Player check")]
     [SerializeField] private LayerMask _groundLayer;
@@ -153,7 +154,7 @@ public class Drone : MonoBehaviour
             BlowUpSurroundings();
 
             if (isPlrCloseEnough && !isPlrBlocked)
-                SceneData.Instance.Player.GetComponent<HealthSystem>().TakeDamage(33f);
+                SceneData.Instance.Player.GetComponent<HealthSystem>().TakeDamage(_explosionDamage);
 
             _explosionVFX.transform.SetParent(null);
             _explosionVFX.SetActive(true);

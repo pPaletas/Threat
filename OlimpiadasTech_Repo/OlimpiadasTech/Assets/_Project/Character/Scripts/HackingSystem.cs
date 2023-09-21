@@ -69,7 +69,7 @@ public class HackingSystem : MonoBehaviour
 
                 obj.ImgOnCanvas.transform.position = _cam.WorldToScreenPoint(obj.IconPosition.position);
 
-                if (IsCloseToCenterOfCamera(obj.transform.position) && _focusedObject == null)
+                if (IsCloseToCenterOfCamera(obj.transform.position) && _focusedObject == null && !obj.onlyShow)
                 {
                     _focusedObject = obj;
                 }

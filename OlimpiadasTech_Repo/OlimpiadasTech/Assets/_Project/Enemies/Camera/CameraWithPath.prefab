@@ -832,11 +832,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 15
+  canBeGrabbed: 0
   _loadSpeed: 50
   _unloadSpeed: 40
   _iconPosition: {fileID: 252624702}
   _sprite: {fileID: 0}
   isActive: 1
+  isBeingGrabbed: 0
   _sight: {fileID: 1056271457295296058}
   _path: {fileID: 1056271456726531439}
   _speedCurve:

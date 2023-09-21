@@ -1,13 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using StarterAssets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class HealthSystem : MonoBehaviour
 {
-    public Action playerDead;
+    public Action<int> playerDead;
+
     public float maxHealth = 100f;
     [Header("Blood screen")]
     [SerializeField] private CanvasGroup _bloodScreen;
@@ -15,6 +14,7 @@ public class HealthSystem : MonoBehaviour
     [SerializeField] private float _animIntensity = 0.2f;
 
     private float _currentHealth;
+    private int _currentLives = 3;
     private bool _isDead;
 
     private ThirdPersonController _movement;
@@ -25,6 +25,7 @@ public class HealthSystem : MonoBehaviour
     private int _defeathHash = Animator.StringToHash("Defeat");
 
     public float CurrentHealth { get => _currentHealth; }
+    public int CurrentLives { get => _currentLives; }
 
     public void TakeDamage(float dmg)
     {
@@ -38,8 +39,10 @@ public class HealthSystem : MonoBehaviour
 
         if (_currentHealth <= 0f && !_isDead)
         {
-            playerDead?.Invoke();
             _isDead = true;
+            _currentLives--;
+            SavingSystem.Instance.SaveData("Lives", _currentLives);
+            playerDead?.Invoke(_currentLives);
         }
     }
 
@@ -60,6 +63,12 @@ public class HealthSystem : MonoBehaviour
         _currentHealth = maxHealth;
         _anim = GetComponent<Animator>();
         _movement = GetComponent<ThirdPersonController>();
+    }
+
+    private void Start()
+    {
+        _currentHealth = (float)SavingSystem.Instance.LoadData("Health");
+        _currentLives = (int)SavingSystem.Instance.LoadData("Lives");
     }
 
     private void LateUpdate()

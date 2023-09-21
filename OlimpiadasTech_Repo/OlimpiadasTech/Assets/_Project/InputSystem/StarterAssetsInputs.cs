@@ -107,7 +107,7 @@ namespace StarterAssets
             zoom = newZoomState.y;
         }
 
-        private void OnApplicationFocus(bool hasFocus)
+        private void Awake()
         {
             SetCursorState(cursorLocked);
         }
