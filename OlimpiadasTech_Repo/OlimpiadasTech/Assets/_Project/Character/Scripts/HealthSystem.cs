@@ -69,6 +69,8 @@ public class HealthSystem : MonoBehaviour
     {
         _currentHealth = (float)SavingSystem.Instance.LoadData("Health");
         _currentLives = (int)SavingSystem.Instance.LoadData("Lives");
+
+        GameManager.Instance.onDataSave += OnSaveData;
     }
 
     private void LateUpdate()
@@ -84,6 +86,11 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        GameManager.Instance.onDataSave -= OnSaveData;
+    }
+
     #region Callbacks
     public void OnHurtAnimationFinished()
     {
@@ -93,6 +100,11 @@ public class HealthSystem : MonoBehaviour
     public void OnDefeatAnimationFinished()
     {
         SceneManager.LoadScene(0);
+    }
+
+    private void OnSaveData()
+    {
+        SavingSystem.Instance.SaveData("Health", _currentHealth);
     }
     #endregion
 }

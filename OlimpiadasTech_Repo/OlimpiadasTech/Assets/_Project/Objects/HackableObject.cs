@@ -79,7 +79,8 @@ public class HackableObject : MonoBehaviour
         if (_isFocused)
         {
             _isFocused = false;
-            _imgOnCanvas.transform.localScale = Vector3.one;
+            if (!onlyShow) _imgOnCanvas.transform.localScale = Vector3.one;
+            else _imgOnCanvas.transform.localScale = Vector3.one * 1.4f;
             _loadedAmount = 0f;
             _fillIcon.fillAmount = 0f;
         }
