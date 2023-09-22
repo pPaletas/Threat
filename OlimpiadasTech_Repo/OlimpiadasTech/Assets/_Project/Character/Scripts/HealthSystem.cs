@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class HealthSystem : MonoBehaviour
 {
     public Action<int> playerDead;
+    public Action<int> onChipsAdded;
+    public Action<int> onChipsRemoved;
 
     public float maxHealth = 100f;
     [Header("Blood screen")]
@@ -15,6 +17,7 @@ public class HealthSystem : MonoBehaviour
 
     private float _currentHealth;
     private int _currentLives = 3;
+    private int _collectedChips = 0;
     private bool _isDead;
 
     private ThirdPersonController _movement;
@@ -26,6 +29,7 @@ public class HealthSystem : MonoBehaviour
 
     public float CurrentHealth { get => _currentHealth; }
     public int CurrentLives { get => _currentLives; }
+    public int CollectedChips { get => _collectedChips; }
 
     public void TakeDamage(float dmg)
     {
@@ -58,6 +62,18 @@ public class HealthSystem : MonoBehaviour
         _anim.SetTrigger(_defeathHash);
     }
 
+    public void AddChips(int amount)
+    {
+        _collectedChips += amount;
+        onChipsAdded?.Invoke(amount);
+    }
+
+    public void RemoveChips(int amount)
+    {
+        _collectedChips -= amount;
+        onChipsRemoved?.Invoke(amount);
+    }
+
     private void Awake()
     {
         _currentHealth = maxHealth;
@@ -69,13 +85,14 @@ public class HealthSystem : MonoBehaviour
     {
         _currentHealth = (float)SavingSystem.Instance.LoadData("Health");
         _currentLives = (int)SavingSystem.Instance.LoadData("Lives");
+        _collectedChips = (int) SavingSystem.Instance.LoadData("Chips");
 
         GameManager.Instance.onDataSave += OnSaveData;
     }
 
     private void LateUpdate()
     {
-        if (_currentHealth < maxHealth)
+        if (_currentHealth < maxHealth * 0.6f)
         {
             float currentAlpha = 1 - (_currentHealth / maxHealth);
 
@@ -83,6 +100,10 @@ public class HealthSystem : MonoBehaviour
             float sine = (Mathf.Sin(Time.time * _animFreq) + 0.5f) * 0.5f * _animIntensity;
 
             _bloodScreen.alpha = currentAlpha - sine;
+        }
+        else
+        {
+            _bloodScreen.alpha = 0f;
         }
     }
 
@@ -105,6 +126,7 @@ public class HealthSystem : MonoBehaviour
     private void OnSaveData()
     {
         SavingSystem.Instance.SaveData("Health", _currentHealth);
+        SavingSystem.Instance.SaveData("Chips", _collectedChips);
     }
     #endregion
 }

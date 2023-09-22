@@ -18,9 +18,12 @@ public class KillSystem : MonoBehaviour
     private Animator _anim;
     private ThirdPersonController _movement;
     private HackingSystem _hacking;
+    private HealthSystem _health;
 
     private bool _isKilling = false;
     private int _killHash = Animator.StringToHash("Kill");
+
+    public bool IsKilling { get => _isKilling; }
 
     private IEnumerator SetupAnimation()
     {
@@ -37,10 +40,12 @@ public class KillSystem : MonoBehaviour
         {
             bool isRobotInPlace = Vector3.Distance(_closestRobot.transform.position, targetPos) <= 0.05f;
             bool isPlrInDirection = Quaternion.Angle(transform.rotation, targetRot) <= 0.5f;
+            bool isRobotInDirection = Quaternion.Angle(_closestRobot.transform.rotation, targetRot) <= 0.5f;
 
-            if (!isRobotInPlace || !isPlrInDirection)
+            if (!isRobotInPlace || !isPlrInDirection ||  !isRobotInDirection)
             {
                 _closestRobot.transform.position = Vector3.Lerp(_closestRobot.transform.position, targetPos, Time.deltaTime * _smoothness);
+                _closestRobot.transform.rotation = Quaternion.Slerp(_closestRobot.transform.rotation, targetRot, Time.deltaTime * _smoothness);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * _smoothness);
             }
             else ready = true;
@@ -48,6 +53,24 @@ public class KillSystem : MonoBehaviour
             // Siguiente frame
             yield return new WaitForEndOfFrame();
         }
+
+        NoiseSystem.Instance.GenerateNoise(5f, 100f);
+        _anim.SetTrigger(_killHash);
+        _closestRobot.GetComponent<RobotStateMachine>().Kill();
+    }
+
+    private void SetupSnappedAnimation()
+    {
+        Vector3 unit = (_closestRobot.transform.position - transform.position);
+        unit.y = 0f;
+        unit.Normalize();
+
+        Vector3 targetPos = transform.position + unit * _killOffset;
+        Quaternion targetRot = Quaternion.LookRotation(unit);
+
+        _closestRobot.transform.position = targetPos;
+        _closestRobot.transform.rotation = targetRot;
+        transform.rotation = targetRot;
 
         NoiseSystem.Instance.GenerateNoise(5f, 100f);
         _anim.SetTrigger(_killHash);
@@ -101,6 +124,7 @@ public class KillSystem : MonoBehaviour
         _anim = GetComponent<Animator>();
         _movement = GetComponent<ThirdPersonController>();
         _hacking = GetComponent<HackingSystem>();
+        _health = GetComponent<HealthSystem>();
     }
 
     private void OnDisable()
@@ -118,11 +142,12 @@ public class KillSystem : MonoBehaviour
     {
         _movement.canMove = true;
         _isKilling = false;
+        _health.AddChips(1);
     }
 
     private void KillButton()
     {
-        if (_closestRobot != null && !_hacking.isGrabbingSomething)
+        if (_closestRobot != null && !_hacking.isGrabbingSomething && !_isKilling)
         {
             _isKilling = true;
             _closestRobot.GetComponent<RobotStateMachine>().SetupAnimation();
@@ -130,7 +155,8 @@ public class KillSystem : MonoBehaviour
 
             _killButton.gameObject.SetActive(false);
 
-            StartCoroutine(SetupAnimation());
+            // StartCoroutine(SetupAnimation());
+            SetupSnappedAnimation();
         }
     }
     #endregion

@@ -90,7 +90,7 @@ public class ChasingState : RobotState
         //     stateMachine.SetState(new RoamingState(stateMachine));
         // }
         // Si llegó al destino, pero no ve al jugador
-        if (stateMachine.movementSystem.Agent.HasReachedDestination() && stateMachine.detectionSystem.IsPlayerBlocked())
+        if (stateMachine.movementSystem.Agent.HasReachedDestination() /*&& stateMachine.detectionSystem.IsPlayerBlocked()*/)
         {
             stateMachine.SetState(new ConfusedState(stateMachine));
         }

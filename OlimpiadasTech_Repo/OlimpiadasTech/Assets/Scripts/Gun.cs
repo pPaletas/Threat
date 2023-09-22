@@ -18,10 +18,7 @@ public class Gun : MonoBehaviour
     [SerializeField]
     private float BulletSpeed = 100;
 
-    [Header("Pools")]
-    [SerializeField]
     private BulletPool _bulletPool;
-    [SerializeField]
     private HitPool _impactPool;
 
     private float LastShootTime;
@@ -114,5 +111,11 @@ public class Gun : MonoBehaviour
         }
 
         _bulletPool.Pool.Release(Trail);
+    }
+
+    private void Awake()
+    {
+        _bulletPool = GameObject.Find("Pools").GetComponent<BulletPool>();
+        _impactPool = GameObject.Find("Pools").GetComponent<HitPool>();
     }
 }

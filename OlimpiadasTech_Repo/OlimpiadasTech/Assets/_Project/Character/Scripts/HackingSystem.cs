@@ -21,7 +21,7 @@ public class HackingSystem : MonoBehaviour
     private ThirdPersonController _movement;
     private Animator _anim;
     private CharacterController _cc;
-
+    private KillSystem _killSystem;
     private HackableObject _focusedObject = null;
 
     private int _hackingHash = Animator.StringToHash("Hacking");
@@ -94,6 +94,7 @@ public class HackingSystem : MonoBehaviour
         _movement = GetComponent<ThirdPersonController>();
         _anim = GetComponent<Animator>();
         _cc = GetComponent<CharacterController>();
+        _killSystem = GetComponent<KillSystem>();
 
         _input.onKillButtonPressed += OnGrabPressed;
 
@@ -107,18 +108,21 @@ public class HackingSystem : MonoBehaviour
 
     private void Update()
     {
-        _movement.canMove = true;
-        _anim.SetBool(_hackingHash, false);
+        if (!_killSystem.IsKilling)
+        {
+            _movement.canMove = true;
+            _anim.SetBool(_hackingHash, false);
 
-        if (_input.hack && _focusedObject != null)
-        {
-            _movement.canMove = false;
-            _focusedObject.Load();
-            _anim.SetBool(_hackingHash, true);
-        }
-        else if (_focusedObject != null)
-        {
-            _focusedObject.Unload();
+            if (_input.hack && _focusedObject != null)
+            {
+                _movement.canMove = false;
+                _focusedObject.Load();
+                _anim.SetBool(_hackingHash, true);
+            }
+            else if (_focusedObject != null)
+            {
+                _focusedObject.Unload();
+            }
         }
     }
 

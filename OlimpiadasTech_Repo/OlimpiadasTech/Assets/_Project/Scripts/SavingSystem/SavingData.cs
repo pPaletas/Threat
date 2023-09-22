@@ -35,5 +35,10 @@ public class SavingData : ScriptableObject
             dataName = "Rotation",
             dataValue = Quaternion.identity
         },
+        new DataStructure()
+        {
+            dataName = "Chips",
+            dataValue = 0
+        },
     };
 }
