@@ -11,6 +11,7 @@ public class HackableObject : MonoBehaviour
     [SerializeField] private float _unloadSpeed = 10f;
     [SerializeField] private Transform _iconPosition;
     [SerializeField] protected Sprite _sprite;
+    [SerializeField] private string _iconAssetName = "";
 
     [HideInInspector] public bool isActive = true;
     [HideInInspector] public bool isBeingGrabbed = false;
@@ -22,8 +23,8 @@ public class HackableObject : MonoBehaviour
 
     private float _loadedAmount = 0f;
 
-    private bool _isIconDisplaying = false;
-    private bool _isFocused = false;
+    protected bool isFocused = false;
+    protected bool isIconDisplaying = false;
 
     public GameObject ImgOnCanvas { get => _imgOnCanvas; }
     public Transform IconPosition { get => _iconPosition; }
@@ -54,31 +55,31 @@ public class HackableObject : MonoBehaviour
         _fillIcon.fillAmount = _loadedAmount / 100f;
     }
 
-    public void DisplayIcon(bool display)
+    public virtual void DisplayIcon(bool display)
     {
-        if (_isIconDisplaying != display)
+        if (isIconDisplaying != display)
         {
-            _isIconDisplaying = display;
+            isIconDisplaying = display;
             _imgOnCanvas.SetActive(display);
 
             if (!display) UnfocusIcon();
         }
     }
 
-    public void FocusIcon()
+    public virtual void FocusIcon()
     {
-        if (!_isFocused)
+        if (!isFocused)
         {
-            _isFocused = true;
+            isFocused = true;
             _imgOnCanvas.transform.localScale = Vector3.one * 1.4f;
         }
     }
 
     public void UnfocusIcon()
     {
-        if (_isFocused)
+        if (isFocused)
         {
-            _isFocused = false;
+            isFocused = false;
             if (!onlyShow) _imgOnCanvas.transform.localScale = Vector3.one;
             else _imgOnCanvas.transform.localScale = Vector3.one * 1.4f;
             _loadedAmount = 0f;
@@ -102,7 +103,8 @@ public class HackableObject : MonoBehaviour
 
     private void CreateIconOnCanvas()
     {
-        GameObject iconPrefab = Resources.Load<GameObject>("HackableIcon");
+        string assetName = string.IsNullOrEmpty(_iconAssetName) ? "HackableIcon" : _iconAssetName;
+        GameObject iconPrefab = Resources.Load<GameObject>(assetName);
 
         _imgOnCanvas = Instantiate(iconPrefab, _iconsContainer);
         _fillIcon = _imgOnCanvas.transform.Find("Bar").GetComponent<Image>();

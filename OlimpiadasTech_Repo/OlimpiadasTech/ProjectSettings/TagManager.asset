@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - CinemachineTarget
+  - SimpleEnemy
   layers:
   - Default
   - TransparentFX
@@ -17,10 +18,10 @@ TagManager:
   - Character
   - Ground
   - Radio
-  - 
-  - 
-  - 
-  - 
+  - SimpleEnemy
+  - Bullet
+  - Boss
+  - BossHitbox
   - 
   - 
   - 

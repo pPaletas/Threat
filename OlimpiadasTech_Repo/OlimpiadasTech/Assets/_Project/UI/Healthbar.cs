@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,6 +10,7 @@ public class Healthbar : MonoBehaviour
     [SerializeField] private Slider _slider;
     [SerializeField] private Transform _livesContainer;
     [SerializeField] private GameObject _chipsAmmout;
+    [SerializeField] private GameObject _livePrefab;
     private HealthSystem _healthSystem;
 
     private IEnumerator ShowAddedChips()
@@ -26,12 +28,16 @@ public class Healthbar : MonoBehaviour
 
         _healthSystem.onChipsAdded += OnChipsAdded;
         _healthSystem.onChipsRemoved += OnChipsRemoved;
+        _healthSystem.livesAdded += OnLivesAdded;
 
         int currentLives = _healthSystem.CurrentLives;
         for (int i = 0; i < 3 - currentLives; i++)
         {
             Destroy(_livesContainer.GetChild(i).gameObject);
         }
+
+        int collectedChips = _healthSystem.CollectedChips;
+        _chipsAmmout.GetComponentInChildren<TextMeshProUGUI>().text = collectedChips.ToString();
     }
 
     private void OnDisable()
@@ -54,6 +60,14 @@ public class Healthbar : MonoBehaviour
     private void OnChipsRemoved(int amount)
     {
         _chipsAmmout.GetComponentInChildren<TextMeshProUGUI>().text = _healthSystem.CollectedChips.ToString();
+    }
+
+    private void OnLivesAdded(int obj)
+    {
+        if (_livesContainer.childCount < 3)
+        {
+            Instantiate(_livePrefab, _livesContainer);
+        }
     }
     #endregion
 }

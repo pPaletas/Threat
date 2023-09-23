@@ -17,6 +17,7 @@ namespace StarterAssets
         public bool sprint;
         public bool crouch;
         public bool hack;
+        public bool shoot;
 
         [Header("Movement Settings")]
         public bool analogMovement;
@@ -69,6 +70,11 @@ namespace StarterAssets
         {
             ZoomInput(value.Get<Vector2>());
         }
+
+        public void OnShoot(InputValue value)
+        {
+            ShootInput(value.isPressed);
+        }
 #endif
 
 
@@ -105,6 +111,11 @@ namespace StarterAssets
         public void ZoomInput(Vector2 newZoomState)
         {
             zoom = newZoomState.y;
+        }
+
+        public void ShootInput(bool newShootState)
+        {
+            shoot = newShootState;
         }
 
         private void Awake()

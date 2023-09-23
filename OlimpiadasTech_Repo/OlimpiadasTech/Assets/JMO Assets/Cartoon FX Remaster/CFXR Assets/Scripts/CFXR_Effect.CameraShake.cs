@@ -230,7 +230,7 @@ namespace CartoonFX
 				UnregisterStaticCallback(this);
 			}
 
-			public void animate(float time)
+			public void animate(float time, float intensity = 1)
 			{
 #if UNITY_EDITOR
 				if (!editorPreview && !EditorApplication.isPlaying)
@@ -275,7 +275,7 @@ namespace CartoonFX
 
 					var randomVec = new Vector3(Random.value, Random.value, Random.value);
 					var shakeVec = Vector3.Scale(randomVec, shakeStrength) * (Random.value > 0.5f ? -1 : 1);
-					shakeVector = shakeVec * shakeCurve.Evaluate(delta) * GLOBAL_CAMERA_SHAKE_MULTIPLIER;
+					shakeVector = shakeVec * shakeCurve.Evaluate(delta) * GLOBAL_CAMERA_SHAKE_MULTIPLIER * intensity;
 				}
 				else if (isShaking)
 				{

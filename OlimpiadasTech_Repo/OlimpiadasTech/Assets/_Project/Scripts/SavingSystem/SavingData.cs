@@ -28,8 +28,8 @@ public class SavingData : ScriptableObject
         new DataStructure()
         {
             dataName = "Position",
-            dataValue = Vector3.zero
-        },
+            dataValue = new Vector3(18f,0f,-0.2f)
+},
         new DataStructure()
         {
             dataName = "Rotation",

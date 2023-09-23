@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class HealthSystem : MonoBehaviour
 {
     public Action<int> playerDead;
+    public Action<int> livesAdded;
     public Action<int> onChipsAdded;
     public Action<int> onChipsRemoved;
 
@@ -68,6 +69,12 @@ public class HealthSystem : MonoBehaviour
         onChipsAdded?.Invoke(amount);
     }
 
+    public void AddLives(int amount)
+    {
+        _currentLives++;
+        livesAdded?.Invoke(amount);
+    }
+
     public void RemoveChips(int amount)
     {
         _collectedChips -= amount;
@@ -85,7 +92,7 @@ public class HealthSystem : MonoBehaviour
     {
         _currentHealth = (float)SavingSystem.Instance.LoadData("Health");
         _currentLives = (int)SavingSystem.Instance.LoadData("Lives");
-        _collectedChips = (int) SavingSystem.Instance.LoadData("Chips");
+        _collectedChips = (int)SavingSystem.Instance.LoadData("Chips");
 
         GameManager.Instance.onDataSave += OnSaveData;
     }

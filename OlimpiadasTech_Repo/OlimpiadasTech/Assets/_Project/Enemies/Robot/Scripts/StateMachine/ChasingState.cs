@@ -5,6 +5,9 @@ public class ChasingState : RobotState
 {
     private float _waitTime = 1f;
     private float _currentWaitTime = 0f;
+    private float _maxBlindChaseTime = 5f;
+
+    private float _currentBlindChaseTime = 0f;
 
     private Vector3 _lastSeenPos;
 
@@ -46,11 +49,15 @@ public class ChasingState : RobotState
                 stateMachine.animationSystem.EnableHeadIk(true);
                 stateMachine.shootingSystem.Shoot();
                 _lastSeenPos = SceneData.Instance.Player.transform.position;
+
+                _currentBlindChaseTime = 0f;
             }
             else
             {
                 stateMachine.movementSystem.Agent.updateRotation = true;
                 stateMachine.animationSystem.EnableHeadIk(false);
+
+                _currentBlindChaseTime += Time.deltaTime;
             }
 
             // bool isWalkable = NavMesh.SamplePosition(SceneData.Instance.Player.transform.position, out NavMeshHit hit, 0.5f, 1);
@@ -90,7 +97,8 @@ public class ChasingState : RobotState
         //     stateMachine.SetState(new RoamingState(stateMachine));
         // }
         // Si llegó al destino, pero no ve al jugador
-        if (stateMachine.movementSystem.Agent.HasReachedDestination() /*&& stateMachine.detectionSystem.IsPlayerBlocked()*/)
+        bool hasReachedDestination = stateMachine.movementSystem.Agent.HasReachedDestination();
+        if (hasReachedDestination && stateMachine.detectionSystem.IsPlayerBlocked() || _currentBlindChaseTime >= _maxBlindChaseTime)
         {
             stateMachine.SetState(new ConfusedState(stateMachine));
         }
