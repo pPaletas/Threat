@@ -66,4 +66,12 @@ public class BossLevelHealthSystem : MonoBehaviour
             _bloodScreen.alpha = 0f;
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("BossArm"))
+        {
+            TakeDamage(30f);
+        }
+    }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class DroneBullet : MonoBehaviour
 {
+    [SerializeField] private float _damage = 0.2f;
     [SerializeField] private float _lifeTime = 5f;
     [SerializeField] private float _rotationSpeed = 5f;
     [SerializeField] private float _bulletForce = 100f;
@@ -89,6 +90,11 @@ public class DroneBullet : MonoBehaviour
     {
         if (_isActive)
         {
+            if (other.gameObject.CompareTag("Boss"))
+            {
+                other.gameObject.GetComponent<BossHealth>().TakeDamage(_damage);
+            }
+
             _isActive = false;
             _particles.transform.SetParent(null);
             _particles.SetActive(true);
