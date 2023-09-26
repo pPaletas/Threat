@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public Action onDataSave;
+    public Action<string> onPuzzleCompleted;
 
     public static GameManager Instance;
     private GameObject _plr;
@@ -20,16 +21,27 @@ public class GameManager : MonoBehaviour
         onDataSave?.Invoke();
     }
 
-    private void OnPlayerDeath(int currentLives)
+    public void PuzzleCompleted(string puzzleName)
+    {
+        onPuzzleCompleted?.Invoke(puzzleName);
+    }
+
+    public void ResetToLastSave(int currentLives)
     {
         if (currentLives > 0)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            int savedLevel = (int)SavingSystem.Instance.LoadData("Level");
+            SceneManager.LoadScene(savedLevel);
         }
         else
         {
             SceneManager.LoadScene(1);
         }
+    }
+
+    private void OnPlayerDeath(int currentLives)
+    {
+        ResetToLastSave(currentLives);
     }
 
     private void Awake()

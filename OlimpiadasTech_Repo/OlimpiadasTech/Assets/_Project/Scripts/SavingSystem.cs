@@ -32,6 +32,5 @@ public class SavingSystem : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-    }
-    
+    }   
 }

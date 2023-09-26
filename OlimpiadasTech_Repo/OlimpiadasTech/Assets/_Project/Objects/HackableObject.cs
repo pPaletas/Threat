@@ -7,6 +7,9 @@ public class HackableObject : MonoBehaviour
 {
     public float range;
     public bool canBeGrabbed = false;
+    public bool playAnimation = true;
+
+
     [SerializeField] private float _loadSpeed = 20f;
     [SerializeField] private float _unloadSpeed = 10f;
     [SerializeField] private Transform _iconPosition;

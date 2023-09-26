@@ -63,7 +63,16 @@ public class HackingSystem : MonoBehaviour
             bool isGameObjectActive = obj.gameObject.activeInHierarchy;
             bool isInRange = dist <= obj.range;
 
-            if (isGameObjectActive && isInRange && !IsCameraBlocked(obj.transform.position) && obj.isActive && !obj.isBeingGrabbed && !isGrabbingSomething)
+            Vector3 unit = (obj.transform.position - _cam.transform.position);
+            unit.Normalize();
+
+            Vector3 fwd = _cam.transform.forward;
+            fwd.Normalize();
+
+            float dot = Vector3.Dot(fwd, unit);
+            float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
+
+            if (isGameObjectActive && isInRange && !IsCameraBlocked(obj.transform.position) && obj.isActive && !obj.isBeingGrabbed && !isGrabbingSomething && angle <= 60f)
             {
                 obj.DisplayIcon(true);
 
@@ -117,7 +126,7 @@ public class HackingSystem : MonoBehaviour
             {
                 _movement.canMove = false;
                 _focusedObject.Load();
-                _anim.SetBool(_hackingHash, true);
+                _anim.SetBool(_hackingHash, true && _focusedObject.playAnimation);
             }
             else if (_focusedObject != null)
             {

@@ -127,7 +127,8 @@ public class HealthSystem : MonoBehaviour
 
     public void OnDefeatAnimationFinished()
     {
-        SceneManager.LoadScene(0);
+        _currentLives--;
+        GameManager.Instance.ResetToLastSave(_currentLives);
     }
 
     private void OnSaveData()

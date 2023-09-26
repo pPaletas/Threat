@@ -1,54 +1,5 @@
 using UnityEngine;
 
-public class BossSweepState : BossState
-{
-    private bool _armRaised = false;
-    private bool _detectedHitbox = false;
-
-    public BossSweepState(BossStateMachine stateMachine) : base(stateMachine) { }
-
-    public override void Enter()
-    {
-        stateMachine.animator.SetTrigger("Sweep");
-        stateMachine.onAnimationEvent += OnAnimationEvent;
-
-        base.Enter();
-    }
-
-    public override void Tick()
-    {
-        if (_armRaised && !_detectedHitbox)
-        {
-            float currentHandY = stateMachine.hand.position.y;
-            float currentPlayerY = BossLevelSceneData.Instance.Player.transform.position.y;
-
-            if (currentHandY <= currentPlayerY)
-            {
-                _detectedHitbox = true;
-                Debug.Log("HITED");
-            }
-        }
-
-        base.Tick();
-    }
-
-    private void OnAnimationEvent(string obj)
-    {
-        if (obj == "sweep-finished")
-        {
-            stateMachine.SetState(new BossIdleState(stateMachine));
-        }
-        else if (obj == "arm-raised")
-        {
-            _armRaised = true;
-        }
-        else if(obj == "arm-downcomoalejo")
-        {
-            _armRaised = false;
-        }
-    }
-}
-
 public class BossIdleState : BossState
 {
     private bool _isRotating = false;
@@ -61,22 +12,47 @@ public class BossIdleState : BossState
 
     public override void Enter()
     {
+        stateMachine.headRig.weight = 1f;
         _randomIdleTime = Random.Range(stateMachine.idleTime.x, stateMachine.idleTime.y);
     }
 
     public override void Tick()
     {
+        stateMachine.headRig.weight = 1f;
         RotateTowardsPlayer();
         TickIdleTime();
 
         base.Tick();
     }
 
+    public override void Exit()
+    {
+        base.Exit();
+
+        stateMachine.headRig.weight = 0f;
+    }
+
     protected override void CheckTransitions()
     {
+
         if (_currentIdleTime >= _randomIdleTime)
         {
-            stateMachine.SetState(new BossSweepState(stateMachine));
+            int randomNum = stateMachine.currentState < 3 ? stateMachine.currentState : Random.Range(0, 3);
+
+            if (randomNum == 0)
+            {
+                stateMachine.SetState(new BossEnemiesSummonState(stateMachine));
+            }
+            else if (randomNum == 1)
+            {
+                stateMachine.SetState(new BossRingsState(stateMachine));
+            }
+            else
+            {
+                stateMachine.SetState(new BossExplosiveEntitySummonState(stateMachine));
+            }
+
+            stateMachine.currentState++;
         }
     }
 
@@ -124,6 +100,7 @@ public class BossIdleState : BossState
 
     private void TickIdleTime()
     {
-        _currentIdleTime += Time.deltaTime;
+        if (stateMachine.enemiesContainer.childCount <= 0 && stateMachine.explosiveEntitiesContainer.childCount <= 0)
+            _currentIdleTime += Time.deltaTime;
     }
 }

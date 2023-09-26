@@ -440,7 +440,7 @@ namespace StarterAssets
             if (animationEvent.animatorClipInfo.clip.name == "Crouched Walking")
             {
                 multiplier = 0.3f;
-                noiseGeneration = 5f;
+                noiseGeneration = 0f;
             }
             else
             {

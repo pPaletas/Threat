@@ -16,6 +16,8 @@ public class ChasingState : RobotState
     public override void Enter()
     {
         base.Enter();
+        
+        stateMachine.volumetricLight.SetColor(Color.red);
         stateMachine.movementSystem.StopAgent();
         stateMachine.movementSystem.SetStoppingDistance(1f);
         stateMachine.movementSystem.Agent.updateRotation = false;
@@ -83,6 +85,7 @@ public class ChasingState : RobotState
         stateMachine.movementSystem.Agent.updateRotation = true;
         stateMachine.movementSystem.SetSpeed(1f);
         stateMachine.animationSystem.EnableHeadIk(false);
+        stateMachine.volumetricLight.SetColor(Color.green);
 
         stateMachine.exclamationMark.SetActive(false);
     }

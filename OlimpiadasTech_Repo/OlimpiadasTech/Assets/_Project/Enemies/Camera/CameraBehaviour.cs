@@ -21,6 +21,7 @@ public class CameraBehaviour : HackableObject
     private Transform _target;
     private VolumetricLight _spotLight;
     private Animator _anim;
+    private AudioSource _flickeringLightsAudio;
 
     private HostilCameraState _currentState = HostilCameraState.Active;
     private HostilCameraState _lastState = HostilCameraState.Active;
@@ -34,11 +35,17 @@ public class CameraBehaviour : HackableObject
     private int _deactivaionHash = Animator.StringToHash("Deactivated");
     private int _activationHash = Animator.StringToHash("Activated");
 
+    public bool isEnemyActive = true;
+
     protected override void OnLoaded_E()
     {
         _lastState = _currentState;
         _currentState = HostilCameraState.Deactivated;
         _anim.SetTrigger(_deactivaionHash);
+        _flickeringLightsAudio.Play();
+
+        StartCoroutine(DisableSoundAfterSeconds());
+
         base.OnLoaded_E();
     }
 
@@ -120,12 +127,23 @@ public class CameraBehaviour : HackableObject
     {
         _currentUnactiveTime += Time.deltaTime;
 
+        if (_currentUnactiveTime >= _deactivationTime * 0.8f && !_flickeringLightsAudio.isPlaying)
+        {
+            _flickeringLightsAudio.Play();
+        }
+
         if (_currentUnactiveTime >= _deactivationTime)
         {
             _currentUnactiveTime = 0f;
             _anim.ResetTrigger(_deactivaionHash);
             _anim.SetTrigger(_activationHash);
         }
+    }
+
+    private IEnumerator DisableSoundAfterSeconds()
+    {
+        yield return new WaitForSeconds(1f);
+        _flickeringLightsAudio.Stop();
     }
 
     protected override void Awake()
@@ -135,6 +153,7 @@ public class CameraBehaviour : HackableObject
         _target = transform.Find("Target");
         _spotLight = transform.GetComponentInChildren<VolumetricLight>();
         _anim = GetComponent<Animator>();
+        _flickeringLightsAudio = GetComponent<AudioSource>();
 
         foreach (Transform child in _path)
         {
@@ -144,13 +163,16 @@ public class CameraBehaviour : HackableObject
 
     private void Update()
     {
-        if (_currentState == HostilCameraState.Active || _currentState == HostilCameraState.Stationary)
+        if (isEnemyActive)
         {
-            Watch();
-        }
-        else if (_currentState == HostilCameraState.Deactivated)
-        {
-            TickUnactiveTime();
+            if (_currentState == HostilCameraState.Active || _currentState == HostilCameraState.Stationary)
+            {
+                Watch();
+            }
+            else if (_currentState == HostilCameraState.Deactivated)
+            {
+                TickUnactiveTime();
+            }
         }
     }
 
@@ -160,6 +182,7 @@ public class CameraBehaviour : HackableObject
         _anim.ResetTrigger(_activationHash);
         _currentState = _lastState;
         isActive = true;
+        _flickeringLightsAudio.Stop();
     }
     #endregion
 }

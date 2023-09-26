@@ -18,3 +18,4 @@ MonoBehaviour:
   - dataName: Position
   - dataName: Rotation
   - dataName: Chips
+  - dataName: Level

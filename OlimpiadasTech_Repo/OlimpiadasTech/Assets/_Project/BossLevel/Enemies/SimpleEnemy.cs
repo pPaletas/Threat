@@ -24,7 +24,6 @@ public class SimpleEnemy : MonoBehaviour
         Vector3 unit = (_currentPlayerPos - transform.position).normalized;
         _rb.AddForce(unit * _speed);
 
-
         Vector3 vel = _rb.velocity;
         vel = Vector3.ClampMagnitude(vel, _speed);
 

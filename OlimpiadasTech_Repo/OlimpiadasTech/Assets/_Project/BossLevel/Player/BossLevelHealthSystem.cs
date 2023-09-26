@@ -14,6 +14,8 @@ public class BossLevelHealthSystem : MonoBehaviour
     [SerializeField] private float _animFreq = 5f;
     [SerializeField] private float _animIntensity = 0.2f;
 
+    private GameObject _cameraShake;
+
     private float _currentHealth;
     private int _currentLives = 3;
     private bool _isDead;
@@ -24,6 +26,11 @@ public class BossLevelHealthSystem : MonoBehaviour
     public void TakeDamage(float dmg)
     {
         _currentHealth = Mathf.Clamp(_currentHealth - dmg, 0f, maxHealth);
+
+        if (dmg >= 30f)
+        {
+            _cameraShake.SetActive(true);
+        }
 
         if (_currentHealth <= 0f && !_isDead)
         {
@@ -48,6 +55,7 @@ public class BossLevelHealthSystem : MonoBehaviour
     private void Awake()
     {
         _currentHealth = maxHealth;
+        _cameraShake = GetComponentInChildren<ParticleSystem>(true).gameObject;
     }
 
     private void LateUpdate()
@@ -69,7 +77,7 @@ public class BossLevelHealthSystem : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("BossArm"))
+        if (other.gameObject.CompareTag("BossRing"))
         {
             TakeDamage(30f);
         }

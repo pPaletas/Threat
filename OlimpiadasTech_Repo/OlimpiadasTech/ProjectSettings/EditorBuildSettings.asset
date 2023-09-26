@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Playground.unity
     guid: e9017d5f96b9f09489b4b37e1d6eb914
   - enabled: 1
+    path: Assets/_Project/Scenes/Level1.unity
+    guid: 4b32261666bd6b94f91544cc817ee6c2
+  - enabled: 0
     path: Assets/_Project/Scenes/GameOver.unity
     guid: a40ac95a82e67124ea9ec943f8207a7c
   - enabled: 1

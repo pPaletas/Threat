@@ -7,7 +7,8 @@ TagManager:
   - CinemachineTarget
   - SimpleEnemy
   - Boss
-  - BossArm
+  - FxTemporaire
+  - BossRing
   layers:
   - Default
   - TransparentFX
@@ -24,10 +25,10 @@ TagManager:
   - Bullet
   - Boss
   - BossHitbox
-  - BossArm
-  - 
-  - 
-  - 
+  - BossRing
+  - Trigger
+  - Bongo
+  - OrganButton
   - 
   - 
   - 

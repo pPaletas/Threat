@@ -20,11 +20,14 @@ public class RobotState
 
 public class RobotStateMachine : MonoBehaviour
 {
+    public bool isEnemyActive = false;
+
     #region Systems Reference
     [HideInInspector] public MovementSystem movementSystem;
     [HideInInspector] public ShootingSystem shootingSystem;
     [HideInInspector] public DetectionSystem detectionSystem;
     [HideInInspector] public AnimationSystem animationSystem;
+    [HideInInspector] public VolumetricLight volumetricLight;
     #endregion
 
     [HideInInspector] public GameObject questionMark;
@@ -56,6 +59,7 @@ public class RobotStateMachine : MonoBehaviour
         shootingSystem = GetComponent<ShootingSystem>();
         detectionSystem = GetComponent<DetectionSystem>();
         animationSystem = GetComponent<AnimationSystem>();
+        volumetricLight = GetComponentInChildren<VolumetricLight>();
 
         questionMark = transform.Find("Symbols/QuestionMark").gameObject;
         exclamationMark = transform.Find("Symbols/ExclamationMark").gameObject;
@@ -69,7 +73,9 @@ public class RobotStateMachine : MonoBehaviour
 
     private void Update()
     {
-        currentState?.Tick();
-        // Debug.Log(currentState.GetType());
+        if (isEnemyActive)
+        {
+            currentState?.Tick();
+        }
     }
 }
