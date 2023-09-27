@@ -25,10 +25,10 @@ public class MainDoorPuzzle : MonoBehaviour
 
     private IEnumerator SwitchCamera()
     {
-        yield return new WaitForSeconds(0.5f);
+        _vCamSelf.Priority = 20;
+        yield return new WaitForSeconds(1f);
         _openingPiece++;
         _rotatingPuzzle = true;
-        _vCamSelf.Priority = 20;
     }
 
     private IEnumerator CloseAfterOpening()

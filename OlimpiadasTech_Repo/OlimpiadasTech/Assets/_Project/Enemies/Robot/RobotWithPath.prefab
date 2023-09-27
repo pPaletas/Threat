@@ -1741,10 +1741,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 219e63f2c166ed34cbfab6ad04e4f443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isEnemyActive: 0
   movementSystem: {fileID: 0}
   shootingSystem: {fileID: 0}
   detectionSystem: {fileID: 0}
   animationSystem: {fileID: 0}
+  volumetricLight: {fileID: 0}
   questionMark: {fileID: 0}
   exclamationMark: {fileID: 0}
   isVulnerable: 0
@@ -1768,7 +1770,7 @@ MonoBehaviour:
   _perifericAngle: 75
   _wallsMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 1049088
   _detectionPointsContainer: {fileID: 7023343997778562369}
   _hearingTriggerResetTime: 2
 --- !u!114 &7023343998525593795
@@ -1787,7 +1789,7 @@ MonoBehaviour:
   _rotationSpeed: 4
   _stationaryTime: {x: 0.5, y: 2}
   _loop: 1
-  _randomRoaming: 1
+  _randomRoaming: 0
   _path: {fileID: 7023343999256302564}
 --- !u!195 &7023343998525593797
 NavMeshAgent:

@@ -29,20 +29,22 @@ public class HackingSystem : MonoBehaviour
 
     private bool IsCameraBlocked(Vector3 objPos)
     {
-        bool isBlocked = Physics.Linecast(objPos, _cam.transform.position, _wallsMask);
+        bool isBlocked = Physics.Linecast(objPos, _cam.transform.position, out RaycastHit hit, _wallsMask);
 
         return isBlocked;
     }
 
-    private bool IsCloseToCenterOfCamera(Vector3 objPos)
+    private bool IsCloseToCenterOfCamera(Vector3 objPos, float distance)
     {
         Vector2 objPosOnScreen = _cam.WorldToScreenPoint(objPos);
 
         // Obtenemos la distancia en relación al centro
         Vector2 center = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
         float dist = Vector2.Distance(center, objPosOnScreen);
+
         // Retornamos si está lo suficientemente cerca
-        return dist <= 300f;
+        float closeRadius = distance == -1 ? 300f : distance;
+        return dist <= closeRadius;
     }
 
     private void GetAllHackableObjectsOnScene()
@@ -78,7 +80,7 @@ public class HackingSystem : MonoBehaviour
 
                 obj.ImgOnCanvas.transform.position = _cam.WorldToScreenPoint(obj.IconPosition.position);
 
-                if (IsCloseToCenterOfCamera(obj.transform.position) && _focusedObject == null && !obj.onlyShow)
+                if (IsCloseToCenterOfCamera(obj.transform.position, obj.distFromCam) && _focusedObject == null && !obj.onlyShow)
                 {
                     _focusedObject = obj;
                 }

@@ -61,6 +61,7 @@ public class RobotStateMachine : MonoBehaviour
         animationSystem = GetComponent<AnimationSystem>();
         volumetricLight = GetComponentInChildren<VolumetricLight>();
 
+
         questionMark = transform.Find("Symbols/QuestionMark").gameObject;
         exclamationMark = transform.Find("Symbols/ExclamationMark").gameObject;
     }
@@ -75,7 +76,12 @@ public class RobotStateMachine : MonoBehaviour
     {
         if (isEnemyActive)
         {
+            detectionSystem.SetEarsActive(true);
             currentState?.Tick();
+        }
+        else
+        {
+            detectionSystem.SetEarsActive(false);
         }
     }
 }

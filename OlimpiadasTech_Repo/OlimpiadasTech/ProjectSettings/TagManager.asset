@@ -29,8 +29,8 @@ TagManager:
   - Trigger
   - Bongo
   - OrganButton
-  - 
-  - 
+  - PushButton
+  - FakeGround
   - 
   - 
   - 
