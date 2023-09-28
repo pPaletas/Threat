@@ -55,7 +55,7 @@ public class DetectionSystem : MonoBehaviour
         {
             _currentNoiseValue = 0f;
             _timeSinceLastNoise = 0f;
-            return DetectionResult.Indirect;
+            return DetectionResult.None;
         }
 
         return DetectionResult.None;

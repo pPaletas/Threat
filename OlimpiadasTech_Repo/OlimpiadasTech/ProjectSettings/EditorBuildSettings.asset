@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Playground.unity
     guid: e9017d5f96b9f09489b4b37e1d6eb914
   - enabled: 1
@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Project/Scenes/GameOver.unity
     guid: a40ac95a82e67124ea9ec943f8207a7c
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Project/Scenes/Boss.unity
     guid: 3c080978f1f76fb44a33465f7e1792ab
   m_configObjects:

@@ -44,7 +44,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.080085754, g: 1, b: 0, a: 1}
+  m_Color: {r: 0, g: 1, b: 0, a: 1}
   m_Intensity: 1
   m_Range: 0.3
   m_SpotAngle: 30
@@ -193,7 +193,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.080085754, g: 1, b: 0, a: 1}
+  m_Color: {r: 0, g: 1, b: 0, a: 1}
   m_Intensity: 1
   m_Range: 0.3
   m_SpotAngle: 30
@@ -367,7 +367,7 @@ AudioSource:
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 0
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
@@ -541,7 +541,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 3
-  distFromCam: 150
+  distFromCam: 100
   canBeGrabbed: 0
   playAnimation: 0
   _loadSpeed: 500
@@ -746,7 +746,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 3
-  distFromCam: 150
+  distFromCam: 100
   canBeGrabbed: 0
   playAnimation: 0
   _loadSpeed: 500
@@ -801,7 +801,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3999333052433259534}
   - component: {fileID: 3999333052433259535}
-  m_Layer: 0
+  - component: {fileID: 1975833390}
+  m_Layer: 9
   m_Name: OrganPuzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -840,6 +841,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e97b5b8cacf1cfe42a18255105a12a09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &1975833390
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3999333052433259529}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0729561, y: 3.1807675, z: 1.3898468}
+  m_Center: {x: 0.036478043, y: 1.090384, z: -0.1949234}
 --- !u!1 &3999333052730176992
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,7 +951,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 3
-  distFromCam: 150
+  distFromCam: 100
   canBeGrabbed: 0
   playAnimation: 0
   _loadSpeed: 500
@@ -1051,7 +1065,7 @@ AudioSource:
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 0
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
@@ -1265,7 +1279,7 @@ AudioSource:
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 0
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
@@ -1386,7 +1400,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.080085754, g: 1, b: 0, a: 1}
+  m_Color: {r: 0, g: 1, b: 0, a: 1}
   m_Intensity: 1
   m_Range: 0.3
   m_SpotAngle: 30
