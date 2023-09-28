@@ -183,6 +183,12 @@ public class Drone : MonoBehaviour
                         rb.AddForce(unit * _explosionForce, ForceMode.Impulse);
                     }
                 }
+
+                if (hit.CompareTag("GroundSensor"))
+                {
+                    if (!Physics.Linecast(transform.position, hit.transform.position, _groundLayer))
+                        hit.GetComponent<GroundSensor>().Trigger();
+                }
             }
         }
     }

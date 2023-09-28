@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 5658291323127997063}
   - component: {fileID: 6987202596023857258}
   - component: {fileID: 720301008211934330}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Radio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,6 +139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 1.5
+  distFromCam: -1
   canBeGrabbed: 1
   playAnimation: 1
   _loadSpeed: 100

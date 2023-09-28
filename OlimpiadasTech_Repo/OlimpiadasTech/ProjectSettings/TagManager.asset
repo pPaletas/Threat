@@ -9,6 +9,7 @@ TagManager:
   - Boss
   - FxTemporaire
   - BossRing
+  - GroundSensor
   layers:
   - Default
   - TransparentFX
@@ -31,7 +32,7 @@ TagManager:
   - OrganButton
   - PushButton
   - FakeGround
-  - 
+  - SensorGround
   - 
   - 
   - 
