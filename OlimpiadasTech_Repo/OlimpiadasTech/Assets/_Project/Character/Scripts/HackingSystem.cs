@@ -133,8 +133,11 @@ public class HackingSystem : MonoBehaviour
                 _movement.canMove = false;
                 _focusedObject.Load();
                 _anim.SetBool(_hackingHash, true && _focusedObject.playAnimation);
-                if (_focusedObject.playAnimation) _cellphone.SetActive(true);
-                makeSound = true;
+                if (_focusedObject.playAnimation)
+                {
+                    _cellphone.SetActive(true);
+                    makeSound = true;
+                }
             }
             else if (_focusedObject != null)
             {
@@ -142,7 +145,7 @@ public class HackingSystem : MonoBehaviour
             }
 
             if (makeSound && !_hackingSound.isPlaying) _hackingSound.Play();
-            else if(!makeSound) _hackingSound.Stop();
+            else if (!makeSound) _hackingSound.Stop();
         }
     }
 

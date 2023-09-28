@@ -23,6 +23,11 @@ public class RobotStateMachine : MonoBehaviour
     public bool isEnemyActive = false;
 
     #region Systems Reference
+    public GameObject smoke;
+    public AudioSource movingAudio;
+    public AudioSource deathAudio;
+    public AudioSource shootingAudio;
+
     [HideInInspector] public MovementSystem movementSystem;
     [HideInInspector] public ShootingSystem shootingSystem;
     [HideInInspector] public DetectionSystem detectionSystem;
@@ -44,12 +49,15 @@ public class RobotStateMachine : MonoBehaviour
 
     public void SetupAnimation()
     {
+        movingAudio.Stop();
         SetState(new CaughtState(this));
     }
 
     public void Kill()
     {
+        smoke.SetActive(false);
         SetState(new KilledState(this));
+        deathAudio.PlayDelayed(1.5f);
     }
 
     private void Awake()
@@ -76,12 +84,13 @@ public class RobotStateMachine : MonoBehaviour
     {
         if (isEnemyActive)
         {
-            detectionSystem.SetEarsActive(true);
+            if (!detectionSystem.EarsActive) detectionSystem.SetEarsActive(true);
             currentState?.Tick();
         }
         else
         {
-            detectionSystem.SetEarsActive(false);
+            if (detectionSystem.EarsActive)
+                detectionSystem.SetEarsActive(false);
         }
     }
 }

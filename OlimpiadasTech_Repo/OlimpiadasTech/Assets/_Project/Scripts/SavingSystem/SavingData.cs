@@ -28,7 +28,7 @@ public class SavingData : ScriptableObject
         new DataStructure()
         {
             dataName = "Position",
-            dataValue = new Vector3(12,0f,-4)
+            dataValue = new Vector3(12f,0f,-4f)
 },
         new DataStructure()
         {

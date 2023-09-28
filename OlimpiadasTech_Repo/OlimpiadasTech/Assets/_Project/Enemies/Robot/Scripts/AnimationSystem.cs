@@ -7,6 +7,8 @@ using UnityEngine.Animations.Rigging;
 public class AnimationSystem : MonoBehaviour
 {
     [SerializeField] private Rig _headIk;
+    [SerializeField] private AudioSource _electricSound;
+
     private Animator _animator;
     private NavMeshAgent _agent;
 
@@ -51,4 +53,15 @@ public class AnimationSystem : MonoBehaviour
             _headIk.weight = Mathf.Lerp(_headIk.weight, _headIkTarget, Time.deltaTime * 5f);
         }
     }
+
+    #region Callbacks
+    private void OnAnimationEvent(string animName)
+    {
+        if (animName == "ElectricRobot")
+        {
+            _electricSound.Play();
+        }
+
+    }
+    #endregion
 }

@@ -12,6 +12,8 @@ public class KillSystem : MonoBehaviour
     [SerializeField] private float _killOffset = 0.519f;
     [SerializeField] private RectTransform _killButton;
     [SerializeField] private Camera _cam;
+    [SerializeField] private AudioClip _abrirTapaClip;
+    [SerializeField] private AudioSource _fabricAudio;
 
     private StarterAssetsInputs _input;
     private GameObject _closestRobot;
@@ -42,7 +44,7 @@ public class KillSystem : MonoBehaviour
             bool isPlrInDirection = Quaternion.Angle(transform.rotation, targetRot) <= 0.5f;
             bool isRobotInDirection = Quaternion.Angle(_closestRobot.transform.rotation, targetRot) <= 0.5f;
 
-            if (!isRobotInPlace || !isPlrInDirection ||  !isRobotInDirection)
+            if (!isRobotInPlace || !isPlrInDirection || !isRobotInDirection)
             {
                 _closestRobot.transform.position = Vector3.Lerp(_closestRobot.transform.position, targetPos, Time.deltaTime * _smoothness);
                 _closestRobot.transform.rotation = Quaternion.Slerp(_closestRobot.transform.rotation, targetRot, Time.deltaTime * _smoothness);
@@ -138,6 +140,18 @@ public class KillSystem : MonoBehaviour
     }
 
     #region Callbacks
+    public void OnAnimationTrigger(string animName)
+    {
+        if (animName == "AbrirTapa")
+        {
+            AudioSource.PlayClipAtPoint(_abrirTapaClip, transform.position);
+        }
+        else if (animName == "Fabric")
+        {
+            _fabricAudio.Play();
+        }
+    }
+
     public void OnKillAnimationFinished()
     {
         _movement.canMove = true;

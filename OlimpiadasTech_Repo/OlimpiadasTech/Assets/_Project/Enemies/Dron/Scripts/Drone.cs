@@ -186,8 +186,12 @@ public class Drone : MonoBehaviour
 
                 if (hit.CompareTag("GroundSensor"))
                 {
+                    // Debug.Log("HOLA!???r");
+                    Debug.DrawLine(transform.position, hit.transform.position, Color.red, 20f);
                     if (!Physics.Linecast(transform.position, hit.transform.position, _groundLayer))
+                    {
                         hit.GetComponent<GroundSensor>().Trigger();
+                    }
                 }
             }
         }

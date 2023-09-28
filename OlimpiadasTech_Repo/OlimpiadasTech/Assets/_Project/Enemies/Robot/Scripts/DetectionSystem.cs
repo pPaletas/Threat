@@ -33,6 +33,7 @@ public class DetectionSystem : MonoBehaviour
     private float _spotLightOriginalAngle;
 
     public Transform DetectionPivot { get => _detectionPivot; }
+    public bool EarsActive { get => _earsActive; }
 
     #region Main functionality
 
@@ -51,11 +52,11 @@ public class DetectionSystem : MonoBehaviour
             _timeSinceLastNoise = 0f;
             return DetectionResult.Direct;
         }
-        else if ((isPlrClose && sight == DetectionResult.Indirect && !isBlocked) || triggeredBySound)
+        else if (triggeredBySound)
         {
             _currentNoiseValue = 0f;
             _timeSinceLastNoise = 0f;
-            return DetectionResult.None;
+            return DetectionResult.Indirect;
         }
 
         return DetectionResult.None;

@@ -33,12 +33,12 @@ public class BongosPuzzle : PuzzlesBase
             int randomNum = -1;
 
             int randIndex = UnityEngine.Random.Range(0, _showOrder.Count);
-            Debug.Log(randIndex);
             randomNum = _showOrder[randIndex];
             _showOrder.RemoveAt(randIndex);
 
             _order.Add(randomNum);
             transform.Find(randomNum.ToString()).gameObject.SetActive(true);
+            transform.Find(randomNum.ToString()).GetComponent<AudioSource>().Play();
             yield return new WaitForSeconds(1f);
 
             transform.Find(randomNum.ToString()).gameObject.SetActive(false);
@@ -84,6 +84,7 @@ public class BongosPuzzle : PuzzlesBase
 
         transform.Find(index.ToString()).GetComponent<Light>().color = color;
         transform.Find(index.ToString()).gameObject.SetActive(true);
+        transform.Find(index.ToString()).GetComponent<AudioSource>().Play();
 
         yield return new WaitForSeconds(1);
 

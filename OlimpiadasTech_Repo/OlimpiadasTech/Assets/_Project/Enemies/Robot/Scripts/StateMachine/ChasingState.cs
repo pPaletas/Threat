@@ -16,7 +16,7 @@ public class ChasingState : RobotState
     public override void Enter()
     {
         base.Enter();
-        
+
         stateMachine.volumetricLight.SetColor(Color.red);
         stateMachine.movementSystem.StopAgent();
         stateMachine.movementSystem.SetStoppingDistance(1f);
@@ -50,6 +50,7 @@ public class ChasingState : RobotState
                 stateMachine.movementSystem.Agent.updateRotation = false;
                 stateMachine.animationSystem.EnableHeadIk(true);
                 stateMachine.shootingSystem.Shoot();
+                if (!stateMachine.shootingAudio.isPlaying) stateMachine.shootingAudio.Play();
                 _lastSeenPos = SceneData.Instance.Player.transform.position;
 
                 _currentBlindChaseTime = 0f;
@@ -58,6 +59,7 @@ public class ChasingState : RobotState
             {
                 stateMachine.movementSystem.Agent.updateRotation = true;
                 stateMachine.animationSystem.EnableHeadIk(false);
+                stateMachine.shootingAudio.Stop();
 
                 _currentBlindChaseTime += Time.deltaTime;
             }
@@ -81,6 +83,7 @@ public class ChasingState : RobotState
     public override void Exit()
     {
         base.Exit();
+        stateMachine.shootingAudio.Stop();
         stateMachine.movementSystem.SetStoppingDistance(0f);
         stateMachine.movementSystem.Agent.updateRotation = true;
         stateMachine.movementSystem.SetSpeed(1f);

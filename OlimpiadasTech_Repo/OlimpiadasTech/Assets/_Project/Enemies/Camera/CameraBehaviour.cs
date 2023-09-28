@@ -12,16 +12,17 @@ public class CameraBehaviour : HackableObject
     [SerializeField] private AnimationCurve _speedCurve;
     [SerializeField] private float _stationaryTime = 1f;
     [SerializeField] private float _speed = 1f;
+    [SerializeField] private AudioSource _surveillingAudio;
     [Header("Detection")]
     [SerializeField] private LayerMask _wallsMask;
     [Header("Deactivation")]
     [SerializeField] private float _deactivationTime = 10f;
+    [SerializeField] private AudioSource _flickeringLightsAudio;
 
     private List<Transform> _pathPoints = new List<Transform>();
     private Transform _target;
     private VolumetricLight _spotLight;
     private Animator _anim;
-    private AudioSource _flickeringLightsAudio;
 
     private HostilCameraState _currentState = HostilCameraState.Active;
     private HostilCameraState _lastState = HostilCameraState.Active;
@@ -70,6 +71,7 @@ public class CameraBehaviour : HackableObject
     {
         if (_currentState == HostilCameraState.Active)
         {
+            if (!_surveillingAudio.isPlaying) _surveillingAudio.Play();
             Vector3 target = _pathPoints[_currentPoint].position;
 
             _currentValueInCurve += Time.deltaTime * _speed;
@@ -82,6 +84,7 @@ public class CameraBehaviour : HackableObject
                 _currentState = HostilCameraState.Stationary;
                 _currentStationaryTime = 0f;
                 _currentValueInCurve = 0f;
+                _surveillingAudio.Stop();
             }
         }
         else if (_currentState == HostilCameraState.Stationary)
@@ -119,6 +122,7 @@ public class CameraBehaviour : HackableObject
         {
             _spotLight.SetColor(Color.red);
             _currentState = HostilCameraState.PlayerFound;
+            _surveillingAudio.Stop();
             SceneData.Instance.Player.GetComponent<HealthSystem>().Defeat();
         }
     }

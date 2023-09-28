@@ -106,7 +106,7 @@ public class Gun : MonoBehaviour
 
             if (health != null)
             {
-                health.TakeDamage(5);
+                health.TakeDamage(2f);
             }
         }
 
