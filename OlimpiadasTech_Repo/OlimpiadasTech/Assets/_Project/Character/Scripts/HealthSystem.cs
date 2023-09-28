@@ -22,6 +22,7 @@ public class HealthSystem : MonoBehaviour
     private bool _isDead;
 
     private ThirdPersonController _movement;
+    private HackingSystem _hacking;
 
     // Animation
     private Animator _anim;
@@ -59,6 +60,7 @@ public class HealthSystem : MonoBehaviour
 
     public void Defeat()
     {
+        _hacking.enabled = false;
         _movement.canMove = false;
         _anim.SetTrigger(_defeathHash);
     }
@@ -86,6 +88,7 @@ public class HealthSystem : MonoBehaviour
         _currentHealth = maxHealth;
         _anim = GetComponent<Animator>();
         _movement = GetComponent<ThirdPersonController>();
+        _hacking = GetComponent<HackingSystem>();
     }
 
     private void Start()
@@ -123,6 +126,7 @@ public class HealthSystem : MonoBehaviour
     public void OnHurtAnimationFinished()
     {
         _movement.canMove = true;
+        
     }
 
     public void OnDefeatAnimationFinished()

@@ -12,6 +12,8 @@ public class HackingSystem : MonoBehaviour
     [SerializeField] private Transform _grabButton;
     [SerializeField] private Transform _grabTransform;
     [SerializeField] private Rig _rightHandIK;
+    [SerializeField] private GameObject _cellphone;
+    [SerializeField] private AudioSource _hackingSound;
 
     [HideInInspector] public bool isGrabbingSomething = false;
 
@@ -123,17 +125,24 @@ public class HackingSystem : MonoBehaviour
         {
             _movement.canMove = true;
             _anim.SetBool(_hackingHash, false);
+            _cellphone.SetActive(false);
+            bool makeSound = false;
 
             if (_input.hack && _focusedObject != null)
             {
                 _movement.canMove = false;
                 _focusedObject.Load();
                 _anim.SetBool(_hackingHash, true && _focusedObject.playAnimation);
+                if (_focusedObject.playAnimation) _cellphone.SetActive(true);
+                makeSound = true;
             }
             else if (_focusedObject != null)
             {
                 _focusedObject.Unload();
             }
+
+            if (makeSound && !_hackingSound.isPlaying) _hackingSound.Play();
+            else if(!makeSound) _hackingSound.Stop();
         }
     }
 

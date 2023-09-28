@@ -23,6 +23,7 @@ public class HackableObject : MonoBehaviour
     private Transform _iconsContainer;
     private GameObject _imgOnCanvas;
     private Image _fillIcon;
+    private AudioClip _succesfullyHackedAudio;
 
     private float _loadedAmount = 0f;
 
@@ -94,12 +95,15 @@ public class HackableObject : MonoBehaviour
     {
         isActive = false;
         _imgOnCanvas.transform.localScale = Vector3.one;
+
+        if (playAnimation) AudioSource.PlayClipAtPoint(_succesfullyHackedAudio, transform.position);
     }
 
     protected virtual void Awake()
     {
         _iconsContainer = GameObject.Find("HUD/IconsContainer").transform;
         _iconPosition = _iconPosition == null ? transform : _iconPosition;
+        _succesfullyHackedAudio = Resources.Load<AudioClip>("SuccesfullyHacked");
 
         CreateIconOnCanvas();
     }
